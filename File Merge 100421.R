@@ -267,3 +267,81 @@ xyplot(level_total_time ~ timepoint | ID, data = ColorTrick1, as.table = T,
 
 #We can use this same code to create these visualizations for the other game types
 #or any other information we're interested in.
+#-------------------------------------------------------------------------#
+#..........BAO's quiet place.............................................
+
+round1<-read.csv("round1_updated.csv")
+round2<-read.csv("round2_updated.csv")
+round3<-read.csv("round3_updated.csv")
+round4<-read.csv("round4_updated.csv")
+round5<-read.csv("round5_updated.csv")
+round6<-read.csv("round6_updated.csv")
+
+round5<- round5%>%
+  filter(level_start_timestamp != "2021-03-25T18:55:58.767Z")
+
+round1<-mutate(round1, semester=1, timepoint=1, ID = as.factor(as.numeric(gsub("user", "", userid))))
+round2<-mutate(round2, semester=1, timepoint=2, ID = as.factor(as.numeric(gsub("user", "", userid))))
+round3<-mutate(round3, semester=1, timepoint=3, ID = as.factor(as.numeric(gsub("user", "", userid))))
+round4<-mutate(round4, semester=2, timepoint=1, ID = as.factor(as.numeric(gsub("user", "", userid))))
+round5<-mutate(round5, semester=2, timepoint=2, ID = as.factor(as.numeric(gsub("user", "", userid))))
+round6<-mutate(round6, semester=2, timepoint=3, ID = as.factor(as.numeric(gsub("user", "", userid))))
+
+dumdum <- rbind(round1, round2, round3, round4, round5, round6)
+dumdum$ID <- as.numeric(as.character(dumdum$ID))
+dumdum <- subset(dumdum, event_type != "scorecard")
+dumdum <- subset(dumdum, game_name != "playlist")
+
+color1 <- subset(dumdum, game_name == "color trick 1")
+color2 <- subset(dumdum, game_name == 'color trick 2')
+color3 <- subset(dumdum, game_name == 'color trick 3')
+hswipe <- subset(dumdum, game_name == 'hand swype')
+df_color1 <- color1[c("ID", "semester", "response_reaction_time")]
+df_color2 <- color2[c("ID", "semester", "response_reaction_time")]
+df_color3 <- color3[c("ID", "semester", "response_reaction_time")]
+df_hswipe <- hswipe[c("ID", "semester", "response_reaction_time")]
+
+library(ggplot2)
+library(viridis)
+library(raster)
+library(dplyr)
+library(plyr)
+library(paletteer)
+
+kde_funny <- function(x, y, ti) {
+  #get 2D KDE
+  kde <- kde2d(x, y)
+  contour(kde)
+  
+  #convert to raster and dataframe
+  r <- raster(kde)
+  mydata <- as.data.frame(r, xy = T)
+  
+  #group by x value using aggregate() or ddply()
+  hd <- ddply(mydata, "x", summarize, max = max(layer))
+  agg <- aggregate(mydata$layer, by = list(mydata$x), FUN = max)
+  
+  #matching corresponding y values and add to plot
+  hd <- mydata[match(hd$max, mydata$layer), ]
+  lines(hd$x, hd$y, col = "red", lwd = 2)
+  
+  #plotting
+  ggplot() +
+    stat_density_2d(aes(x, y, fill = after_stat(level)),
+                    geom = "polygon")+
+    geom_line(aes(x = hd$x, y = hd$y), color = "red") +
+    scale_fill_paletteer_c("viridis::plasma") +
+    labs(x = "ID", y = "response reaction time", title = ti) +
+    xlim(0, 40) +
+    ylim(0, 3000) +
+    theme_bw()
+}
+
+kde_funny(x = df_color1$ID, y = df_color1$response_reaction_time, ti = "2D KDE Response Reaction Time for Color Trick 1")
+kde_funny(x = df_color2$ID, y = df_color2$response_reaction_time, ti = "2D KDE Response Reaction Time for Color Trick 2")
+kde_funny(x = df_color3$ID, y = df_color3$response_reaction_time, ti = "2D KDE Response Reaction Time for Color Trick 3")
+kde_funny(x = df_hswipe$ID, y = df_hswipe$response_reaction_time, ti = "2D KDE Response Reaction Time for Hand Swype")
+
+plot(x = dumdum$ID, y = dumdum$response_reaction_time)                
+                
+                
