@@ -26,7 +26,6 @@ R5<- R5%>%
 #Now at 1033  
 nrow(R5)
 
-
 #This next step has multiple purposes. First, we are adding "semester" and "timepoint"
 #variables to the dataset. Since "user1", "user2"... "usern" was used for both
 #semesters, despite these representing different people, I created a new ID variable.
@@ -43,6 +42,10 @@ Full<-rbind(R1, R2, R3, R4, R5, R6)
 
 #Ensuring the data looks correct and everything merged as expected
 str(Full)
+
+#We know that user40 was a test case, so this person needs to be removed
+Full <- Full%>%
+          filter(ID != 140)
 
 #Based on information from Andrew's Excel sheet, we know the intervention group
 #is the following:
@@ -296,7 +299,6 @@ xyplot(level_total_time ~ timepoint | ID, data = ColorTrick1, as.table = T,
 #The following visualizations also give us an idea of overall group distributions
 
 ColorTrick1%>%
-  filter(Int %in% c("Control", "Intervention"))%>%
   ggplot(aes(x = tp_fac, y = level_total_time, fill = Int))+
   geom_violin(alpha = .5)+
   xlab("Timepoint")+
@@ -304,7 +306,6 @@ ColorTrick1%>%
   facet_wrap(.~Int)
 
 ColorTrick1%>%
-  filter(Int %in% c("Control", "Intervention"))%>%
   ggplot(aes(x = tp_fac, y = level_total_time, fill = Int))+
   geom_boxplot(alpha = .5)+
   xlab("Timepoint")+
@@ -312,14 +313,12 @@ ColorTrick1%>%
   facet_wrap(.~Int)
 
 ColorTrick1%>%
-  filter(Int %in% c("Control", "Intervention"))%>%
   ggplot(aes(x = level_total_time, fill = Int))+
   geom_density(alpha = .5)+
   xlab("Level Total Time")+
   facet_grid(tp_fac~Int)
 
 ColorTrick1%>%
-  filter(Int %in% c("Control", "Intervention"))%>%
   ggplot(aes(x = level_total_time, fill = Int))+
   geom_histogram(alpha = .5, binwidth = 2000)+
   xlab("Level Total Time")+
