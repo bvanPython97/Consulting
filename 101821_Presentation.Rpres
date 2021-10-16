@@ -1,0 +1,263 @@
+Measuring Cognitive Change Over the Course of an 8-Week Mindfulness-Based Mobile Intervention
+========================================================
+<h2> Faculty contact: Becky Silton (Clinical Psychology) </h2>
+
+<h3> Qing Gong, Bao Van, and Nathan Lutz </h3>
+
+<h3> 10/18/2021 </h3>
+
+Mindfulness
+========================================================
+<h2> Headspace </h2>
+
+- Mindfulness and Meditation App
+
+- Developed in 2010
+
+- Over 65 million downloads as of May 2021
+
+***
+
+```{r, echo = FALSE}
+library(magick)
+pic <- image_read('~/Consulting/Headspace.jpeg')
+pic
+```
+
+
+Mindfulness and Depression
+========================================================
+<ul>
+<li> Research has shown the effectiveness of mindfulness-based interventions on depression
+    <h5>
+    <ul>
+    <li> Mindfulness-based cognitive therapy (Tovote et al., 2014)
+    <li> Combination with medication (Huijbers et al., 2015)
+    <li> Meta-analysis (Hofmann et al., 2010)
+</li>
+</ul>
+</h5>
+***
+
+```{r, echo = FALSE}
+pic
+```
+
+Depression and Cognition
+========================================================
+<ul>
+<li> Cognition is a reliable predictor of depression
+    <ul>
+    <li> Phillips et al., 2010
+    </li>
+    </ul>
+</li>
+</ul>
+
+<ul>
+<li> Researchers in Dr. Silton's WELL Lab were unable to collect data during COVID-19
+    <ul>
+    <li> Decided to contract with NeuroUX
+    <li> Wanted to test effectiveness of Headspace usage on cognition
+    <li> Participants played five games testing cognition across three time points
+</li>
+</ul>
+
+Depression and Cognition
+========================================================
+
+- Participants played five games at each time point
+<h5>
+ 1. Color Trick 1
+ 2. Color Trick 2
+ 3. Color Trick 3
+ 4. Hand Swype
+ 5. Quick Tap
+</h5>
+
+***
+```{r, echo = FALSE}
+library(magick)
+image <- image_read('~/Consulting/SampleCT1.jpg')
+image
+```
+
+Data Cleaning
+========================================================
+```{r, echo = FALSE}
+library(tidyverse)
+R1<-read.csv("round1_updated.csv")
+R2<-read.csv("round2_updated.csv")
+R3<-read.csv("round3_updated.csv")
+R4<-read.csv("round4_updated.csv")
+R5<-read.csv("round5_updated.csv")
+R6<-read.csv("round6_updated.csv")
+```
+- 6 separate datasets
+- Duplicate case at one timepoint
+
+<font size = "2">
+```{r}
+R5<- R5%>%
+  filter(level_start_timestamp != "2021-03-25T18:55:58.767Z")
+```
+</font>
+
+- Duplicate usernames
+
+***
+
+<font size = "2">
+```{r}
+R1<-mutate(R1, semester=1, timepoint=1, ID = as.factor(as.numeric(gsub("user", "", userid))+100))
+R2<-mutate(R2, semester=1, timepoint=2, ID = as.factor(as.numeric(gsub("user", "", userid))+100))
+R3<-mutate(R3, semester=1, timepoint=3, ID = as.factor(as.numeric(gsub("user", "", userid))+100))
+R4<-mutate(R4, semester=2, timepoint=1, ID = as.factor(as.numeric(gsub("user", "", userid))+200))
+R5<-mutate(R5, semester=2, timepoint=2, ID = as.factor(as.numeric(gsub("user", "", userid))+200))
+R6<-mutate(R6, semester=2, timepoint=3, ID = as.factor(as.numeric(gsub("user", "", userid))+200))
+```
+</font>
+
+- "Test" user
+
+<font size = "2">
+```{r}
+Full<-rbind(R1, R2, R3, R4, R5, R6)
+Full <- Full%>%
+          filter(ID != 140)
+```
+</font>
+
+Full Dataset
+========================================================
+<font size = "2">
+```{r}
+str(Full)
+```
+</font>
+
+Scorecard
+========================================================
+```{r, echo = FALSE}
+intervention <- c(201, 202, 203, 204, 206, 207, 209, 212, 214,
+                  101, 102, 104, 105, 106, 107, 108, 109, 110,
+                  111, 112, 113, 114, 115, 118, 119)
+control      <- c(205, 208, 210, 211, 213, 103, 116, 117)
+
+Full <- mutate(Full, Int = case_when(ID %in% intervention ~ 1,
+                                      ID %in% control ~ 0))
+
+Full$Int <- factor(Full$Int,
+                   levels = c(0, 1),
+                   labels = c("Control", "Intervention"))
+
+#Making timepoint into a factor for later use
+Full$tp_fac <- ordered(Full$timepoint,
+                         levels = c(1, 2, 3),
+                         labels = c("Time 1", "Time 2", "Time 3")
+                         )
+```
+
+<font size = "4">
+```{r}
+Scores<-filter(Full, event_type == "scorecard")
+Scores2<-select(Scores, c(ID, Int, semester, timepoint, tp_fac,
+                          game_name, correct_count, incorrect_count,
+                          total_trials, fastest_reaction_time, median_reaction_time,
+                          average_reaction_time, level_total_time
+                          ))
+
+str(Scores2)
+```
+</font>
+```{r, echo = FALSE}
+Scores2$correct_count2 = Scores2$total_trials-Scores2$incorrect_count
+Scores2 <- Scores2%>%
+  mutate(correct_count2 = ifelse(game_name == "hand swype",
+                                 correct_count2 -1,
+                                 correct_count2))
+Scores2<-mutate(Scores2, prop_cor = (correct_count2/(correct_count2+incorrect_count)))
+```
+Color Trick 1 Proportion Correct
+========================================================
+<font size = "2">
+```{r}
+ColorTrick1<-filter(Scores2, game_name == "color trick 1")
+library(lattice)
+ColorTrick1C <- filter(ColorTrick1, Int == "Control")
+xyplot(prop_cor ~ timepoint | ID, data = ColorTrick1C, as.table = T,
+       xlab = "Timepoint", ylab = "Proportion Correct", grid = T, pch = 19,
+       type = c("p", "r"), col.line = "darkblue", lwd = 3, lty = 4 )
+```
+</font>
+
+***
+<font size = "2">
+```{r}
+ColorTrick1I <- filter(ColorTrick1, Int == "Intervention")
+
+xyplot(prop_cor ~ timepoint | ID, data = ColorTrick1I, as.table = T,
+       xlab = "Timepoint", ylab = "Proportion Correct", grid = T, pch = 19,
+       type = c("p", "r"), col.line = "darkblue", lwd = 3, lty = 4 )
+```
+</font>
+
+Color Trick 1 Reaction Time
+========================================================
+<font size = "2">
+```{r}
+ColorTrick1<-filter(Scores2, game_name == "color trick 1")
+library(lattice)
+ColorTrick1C <- filter(ColorTrick1, Int == "Control")
+xyplot(average_reaction_time ~ timepoint | ID, data = ColorTrick1C, as.table = T,
+       xlab = "Timepoint", ylab = "Reaction Time", grid = T, pch = 19,
+       type = c("p", "r"), col.line = "darkblue", lwd = 3, lty = 4 )
+```
+</font>
+
+***
+<font size = "2">
+```{r}
+ColorTrick1I <- filter(ColorTrick1, Int == "Intervention")
+
+xyplot(average_reaction_time ~ timepoint | ID, data = ColorTrick1I, as.table = T,
+       xlab = "Timepoint", ylab = "Reaction Time", grid = T, pch = 19,
+       type = c("p", "r"), col.line = "darkblue", lwd = 3, lty = 4 )
+```
+</font>
+
+Color Trick 1 Reaction Time
+========================================================
+<font size = "2">
+```{r}
+ColorTrick1%>%
+  ggplot(aes(x = tp_fac, y = average_reaction_time, fill = Int))+
+  geom_boxplot(alpha = .1)+
+  geom_violin(alpha = .5)+
+  xlab("Timepoint")+
+  ylab("Level Total Time")+
+  facet_wrap(.~Int)
+```
+</font>  
+
+Future Directions
+========================================================
+- Determine best route for measuring depression
+
+- Which game is best?
+
+- Which outcome is best?
+
+- Determining analytic method
+
+References
+========================================================
+<font size = "4">
+Hofmann, S. G., Sawyer, A. T., Witt, A. A., & Oh, D. (2010). The Effect of Mindfulness-Based Therapy on Anxiety and Depression: A Meta-Analytic Review. Journal of Consulting and Clinical Psychology, 78(2), 169–183. https://doi.org/10.1037/a0018555
+
+Huijbers, M. J., Spinhoven, P., Spijker, J., Ruhe, H. G., van Schaik, D. J. F., van Oppen, P., Nolen, W. A., Ormel, J., Kuyken, W., van der Wilt, G. J., Blom, M. B. J., Schene, A. H., Donders, A. R. T., & Speckens, A. E. M. (2015). Adding mindfulness-based cognitive therapy to maintenance antidepressant medication for prevention of relapse/recurrence in major depressive disorder: Randomised controlled trial. Journal of Affective Disorders, 187, 54–61.
+
+Phillips, W. J., Hine, D. W., & Thorsteinsson, E. B. (2010). Implicit cognition and depression: A meta-analysis. Clinical Psychology Review, 30(6), 691–709. https://doi.org/10.1016/j.cpr.2010.05.002
+
+Tovote, K. A., Fleer, J., Snippe, E., Peeters, A. C. T. M., Emmelkamp, P. M. G., Sanderman, R., Links, T. P., & Schroevers, M. J. (2014). Individual Mindfulness-Based Cognitive Therapy and Cognitive Behavior Therapy for Treating Depressive Symptoms in Patients With Diabetes: Results of a Randomized Controlled Trial. Diabetes Care, 37(9), 2427–2434. https://doi.org/10.2337/dc13-2918
+</font>
