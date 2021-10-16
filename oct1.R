@@ -1,5 +1,5 @@
 #read in data
-setwd("E:/GQ/LUC/Graduate materials/Lectures/S488-002/Project/team/input/original")
+setwd("E:.../S488-002/Project/team/input/original")
 #dataFolder <- dir(setwd("C:/Users/gongqing/Desktop/original"))
 #df <- do.call(rbind, lapply(dataFolder, function(x) cbind(read.csv(x), name=strsplit(x,'//.')[[1]][1])))
 #df <- do.call(rbind, lapply(dataFolder, read.csv()))
