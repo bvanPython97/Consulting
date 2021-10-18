@@ -40,7 +40,7 @@ Mindfulness and Depression
 Depression and Cognition
 ========================================================
 <ul>
-<li> Cognition is a reliable predictor of depression
+<li> Cognition is a reliable indicator of depression
     <ul>
     <li> Phillips et al., 2010
     </li>
@@ -53,6 +53,7 @@ Depression and Cognition
     <ul>
     <li> Decided to contract with NeuroUX
     <li> Wanted to test effectiveness of Headspace usage on cognition
+    <li> Participants were randomized into intervention (Headspace) and control groups
     <li> Participants played five games testing cognition across three time points
 </li>
 </ul>
@@ -280,7 +281,7 @@ ColorTrick1%>%
   geom_boxplot(alpha = .1)+
   geom_violin(alpha = .5)+
   xlab("Timepoint")+
-  ylab("Level Total Time")+
+  ylab("Average Reaction Time")+
   facet_wrap(.~Int)
 ```
 
