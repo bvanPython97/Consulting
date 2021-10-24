@@ -63,65 +63,137 @@ data <- merge(R_all, Intervention, by = "ID")
 #double check treatment status right
 #data$treatment[data$ID == "B9"]
 
+
+#update OCT 24
 #subset color trick
-colorTrick <- subset(
-  data,
-  subset = game_name %in% c("color trick 1",
-                            "color trick 2",
-                            "color trick 3"),
-  select = c(
-    game_name,
-    ID,
-    event_type,
-    is_response_correct,
-    response_reaction_time,
-    correct_count,
-    incorrect_count,
-    user_response,
-    average_reaction_time,
-    level_total_time,
-    mechanic_name,
-    time_point,
-    treatment
-  )
-)
-color <- colorTrick %>% filter(event_type == "scorecard") %>% 
+colorTrick <- data %>% select (
+  game_name,
+  ID,
+  event_type,
+  is_response_correct,
+  response_reaction_time,
+  correct_count,
+  incorrect_count,
+  user_response,
+  average_reaction_time,
+  level_total_time,
+  mechanic_name,
+  time_point,
+  treatment
+) %>%
+  filter(game_name %in% c("color trick 1",
+                          "color trick 2",
+                          "color trick 3"))
+
+
+#calculate average reaction time for each subject at each time point for each color trick
+colorT <- colorTrick %>% filter(event_type == "trial" &
+                          is_response_correct == TRUE) %>%
+  group_by(treatment,game_name, ID, time_point) %>%
+  summarise('average_RT' = sprintf("%0.2f", mean(response_reaction_time)),
+            .groups = 'drop')
+
+#change time_point, and ID into factors
+colorT[, c(1:4)] <- lapply(colorT[, c(1:4)], function(x) as.factor(x))
+#change average reaction time into numeric
+colorT$average_RT <- as.numeric(colorT$average_RT)
+str(colorT)
+ 
+#EAD
+par(mfrow = c(2,2))
+#check average reaction time(RT) distribution
+plot(colorT$average_RT, col = 'blue', main = "Mean RT Dist.",
+     ylab="Average raction time")    #looks not normal
+
+#check average RT for 3 color tricks
+plot(average_RT ~ game_name, data = colorT)
+
+#check average RT for intervention group and control group
+plot(average_RT ~ treatment,pch = 19, col = "#ee1311", data = colorT)   
+
+#check average RT for time points
+plot(average_RT ~ time_point, pch = 19, col = "#01ff33", data = colorT)
+          
+#ANOVA test to confirm difference 
+lm1 <- lm(average_RT ~ game_name, data = colorT)
+anova(lm1)
+#** A small p-value indicates mean reaction time for 3 color tricks significantly diff.
+
+#Check assumptions
+shapiro.test(lm1$residuals)    #Normality check    
+#** small p-value means normality assumption is violated, non-parametric methods required
+
+#Non-parametric tests
+wilcox.test(average_RT ~ treatment, data = colorT, conf.level= 0.95)  #difference for two groups
+#**P-value shows sig. different for treatment and control group
+
+kruskal.test(average_RT ~ game_name, data = colorT)                   #difference for three groups
+#** A small p-value indicates mean reaction time for 3 color tricks significantly diff.
+
+#Pairwise test to check which groups different
+pairwise.wilcox.test(colorT$average_RT, colorT$game_name, 
+                     p.adjust.method ="bonf")
+#** p-values shows significantly different for any two groups
+
+kruskal.test(average_RT ~ time_point, data = colorT)    #sig. different for 3 time points
+
+pairwise.wilcox.test(colorT$average_RT, colorT$time_point, 
+                     p.adjust.method ="bonf")         
+#only time point 1 and time point 3 significantly different
+
+
+#Change outliers into normal range
+for (i in 5:5) {
+  for (j in 1:nrow(colorT)) {
+    if (colorT[[j, i]] > quantile(colorT[[i]], 0.75) + 1.5*IQR(colorT[[i]])) {
+      if (i == 5 ) {
+        colorT[[j, i]] <- round(mean(colorT[[i]]), digits = 1)
+      } else {
+        colorT[[j, i]] <- round(mean(colorT[[j, i]]), digits = 2)
+      }
+    }
+  }
+}
+class(colorT)
+
+#plot to see individual slopes
+library(lattice)
+xyplot(average_RT~time_point|ID, data = colorT, type = c("p", "r"))
+
+
+
+
+#Fit a model---Null model
+library(nlme)
+attach(colorT)
+mod1 <- lme(average_RT ~ treatment, random =~time_point|ID, method = 'ML')
+summary(mod1)       # Check if time_point significant
+intervals(mod1)
+
+
+
+
+
+
+
+
+
+
+
+
+#OCT16
+#d1 <- subset(data, game_name == "color trick 1" & ID == "A1" & is_response_correct == TRUE)
+#sum(d1$response_reaction_time, na.rm = TRUE)
+
+
+
+color <- colorTrick_full %>% filter(event_type == "scorecard") %>% 
   select(game_name, time_point, treatment,
          ID,
          correct_count,
          incorrect_count,
          average_reaction_time,
          time_point)
-
-
-
-color <- subset(
-  colorTrick[[event_type != "scorecard"]],
-  subset = game_name %in% c("color trick 1",
-                            "color trick 2",
-                            "color trick 3"),
-  select = c(
-    game_name,
-    ID,
-    event_type,
-    is_response_correct,
-    response_reaction_time,
-    correct_count,
-    incorrect_count,
-    user_response,
-    average_reaction_time,
-    #level_total_time,
-    mechanic_name,
-    time_point,
-    treatment
-  )
-)
-
-
-# ○	Number correct (ncorrect) ---mean # of correct for each subject
-# ○	Number incorrect (nincorrect) ---- mean # of incorrect for each subject
-# ○	Average Reaction Time (RT) for ncorrect (RT_ncorrect)
-# ■	Plot RT to visualize for each participant? For each sample?
 
 # Since average reaction time doesn't include false response reaction time, 
 # average reaction time(in scorecard) could be directly used
@@ -159,37 +231,24 @@ t_com <- intersect(intersect(t1, t2), t3)   #24 same subjects in three time poin
 
 
 
-color1 <- color %>% filter(game_name=='color trick 1') %>% select(game_name, time_point, treatment,
+color1 <- colorT %>% filter(game_name=='color trick 1') %>% select(game_name, time_point, treatment,
                                                                   ID,
                                                                   correct_count,
                                                                   incorrect_count,
                                                                   average_reaction_time,
                                                                   time_point)
 
-#Change outliers into normal range
-for (i in 7:7) {
-  for (j in 1:nrow(color1)) {
-    if (color1[[j, i]] > quantile(color1[[i]], 0.75) + 1.5*IQR(color1[[i]])) {
-      if (i == 7 ) {
-        color1[[j, i]] <- round(mean(color1[[i]]), digits = 2)
-      } else {
-        color1[[j, i]] <- round(mean(color1[[j, i]]), digits = 3)
-      }
-    }
-  }
-}
-
 
 # #plot
 attach(color1)
-par(mfrow = c(1,2))
-plot(average_reaction_time, col = 'blue')
-boxplot(average_reaction_time ~ treatment,pch = 19, col = "#ee1311", data = color1)
-boxplot(average_reaction_time ~ time_point, pch = 19, col = "#01ff33", data = color1)
+par(mfrow = c(1,3))
+plot(colorT$average_RT, col = 'blue')
+plot(average_RT ~ treatment,pch = 19, col = "#ee1311", data = colorT)
+plot(average_RT ~ time_point, pch = 19, col = "#01ff33", data = colorT)
 
 
 #RT by subject
-p1 <- ggplot(color, aes(x = game_name, y = average_reaction_time)) +
+p1 <- ggplot(colorT, aes(x = treatment, y = average_RT)) +
   geom_boxplot(col='#12ff11', fill="#666666") +
   labs(title = 'ART by Game Name', x='Game', y = 'Average Reaction Time')
 #** RT for each subject different, some outliers
