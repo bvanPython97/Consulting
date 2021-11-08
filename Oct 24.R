@@ -7,7 +7,7 @@
 library(tidyverse);library(ggplot2);library(gridExtra);library(lattice);
 
 #read in data
-setwd("E:/GQ/LUC/Graduate materials/Lectures/S488-002/Project/team/input/original")
+setwd("/Users/lutznm/Consulting")
 
 #dataFolder <- dir(setwd("C:/Users/gongqing/Desktop/original"))
 #df <- do.call(rbind, lapply(dataFolder, function(x) cbind(read.csv(x), name=strsplit(x,'//.')[[1]][1])))
@@ -31,12 +31,13 @@ R5 <- round5_updated %>% filter(level_start_timestamp != "2021-03-25T18:55:58.76
 
 #3. Add treatment information from NeurUX.Intrvention.Group file
 #extract id number from NeurUX.ID, add A to Id numbers for 2021 Fall or B for Spring 2021 
-Intervention1 <- NeurUX.Intervention.Group %>% 
+Intervention1 <- read.csv("NeurUX.Intervention.Group.csv") %>% 
   slice(2:15) %>% 
   mutate(ID = paste0('B', substr(NeurUX.ID, 5, 7))) %>% 
   select(treatment= Intervention.Group, ID)
 
-Intervention2 <- NeurUX.Intervention.Group %>% slice(18:36) %>% 
+Intervention2 <- read.csv("NeurUX.Intervention.Group.csv")%>%
+  slice(18:36) %>% 
   mutate( ID = paste0('A', substr(NeurUX.ID, 5, 7))) %>% 
   select(treatment= Intervention.Group, ID)
 
@@ -122,6 +123,28 @@ anova(lm1)
 #Check assumptions
 shapiro.test(lm1$residuals)    #Normality check    
 #** small p-value means normality assumption is violated, non-parametric methods required
+#These small p values may also be arising because we have violated the assumption of independence
+#of observations. Our observations all come from the same individuals and are therefore strongly
+#associated with one another. Beyond that, there are some outliers that may be affecting p
+
+colorTresid <- cbind(colorT, lm1$residuals)
+
+str(colorTresid)
+
+colorTresid%>%
+  ggplot(aes(x = game_name, y = lm1$residuals, fill = game_name))+
+  geom_violin(alpha = .1)+
+  geom_boxplot(alpha = .5)
+
+colorTresid%>%
+  ggplot(aes(x = game_name, y = lm1$residuals, fill = game_name))+
+  geom_violin(alpha = .1)+
+  geom_boxplot(alpha = .5)+
+  facet_grid(treatment ~ time_point)+
+  geom_hline(yintercept = 0)
+
+#This plot shows us the residual differences are based on both timepoint and control vs.
+#intervention. Many of the positive residuals are coming from control group in time 1.
 
 #Non-parametric tests
 wilcox.test(average_RT ~ treatment, data = colorT, conf.level= 0.95)  #difference for two groups
@@ -170,16 +193,78 @@ mod1 <- lme(average_RT ~ treatment, random =~time_point|ID, method = 'ML')
 summary(mod1)       # Check if time_point significant
 intervals(mod1)
 
+#The model above did not converge for me. Trying a slightly different method below
 
+#Setting up a no growth model first (separating by terms in the MLM equations)
+model.a <- nlme(average_RT ~ beta_0 + d_1i,
+                data = colorT,
+                fixed = beta_0 ~ 1,
+                random = d_1i ~ 1,
+                group = ~ ID,
+                start = c(beta_0 = 140),
+                na.action = "na.omit")
+#We don't get a ton of information from this test (it is similar to a repeated measures ANOVA)
+#Our beta tells us whether our intercept is significantly different from zero (not surprising
+#that it is significant)
+summary(model.a)
 
+#We save this value for later when we want to do model comparison
+ModelaLL<-2*model.a$logLik
 
+#We can add the fitted values to our original dataset to show how this model fits our data
+colorT <- mutate(colorT, ngFixed = data.frame(model.a$fitted)$fixed,
+                 tp_cont = as.numeric(time_point),
+                 treat_cont = as.numeric(treatment)-1)
 
+#We can then use ggplot to show this model and our (jittered) data across timepoints
+colorT%>%
+  ggplot()+
+  geom_jitter(aes(x = tp_cont, y = average_RT), width = 0.01, alpha = .5)+
+  geom_smooth(aes(x = tp_cont, y = ngFixed), method = "lm", show.legend = TRUE)
 
+# #We will now move on to the linear growth model (not converging at this point)
+# model.b <- nlme(average_RT ~ (beta_00 + d_0i) + (beta_10 + d_1i)*tp_cont,
+#                 data = colorT,
+#                 fixed = beta_00 + beta_10 ~ 1,
+#                 random = d_0i + d_1i ~ 1,
+#                 group = ~ ID,
+#                 start = c(beta_00 = 130, beta_10 = -.25),
+#                 na.action = "na.omit",
+#                 control = nlmeControl(msMaxIter = 1000))
+# #Summary of model estimates
+# summary(model.b)
+# 
+# #Getting logLikelihood for comparisons
+# ModelbLL<-2*model.b$logLik
+# 
+# #Comparing to previous model, we see the additional parameter (incorporation of time)
+# #significantly improves model fit. Reaction times do decrease on average as a function of time
+# anova(model.a, model.b)
+# 
+# #Again, we can bring the fitted values into the original dataset
+# colorT <- mutate(colorT, linFixed = data.frame(model.b$fitted)$fixed)
+# 
+# #We now add the fitted line for model b to our earlier plot
+# colorT%>%
+#   ggplot()+
+#   geom_jitter(aes(x = tp_cont, y = average_RT), width = 0.01, alpha = .5)+
+#   geom_smooth(aes(x = tp_cont, y = ngFixed), method = "lm")+
+#   geom_smooth(aes(x = tp_cont, y = linFixed), method = "lm", color = "red")
 
-
-
-
-
+#Can't get this to converge. Need to work on it later and make sure it is correct
+# #We will now move on to the linear growth model and include intervention
+# model.c <- nlme(average_RT ~ (beta_00 + beta_01*treat_cont + d_0i) + 
+#                   (beta_10 + beta_11*treat_cont + d_1i)*tp_cont,
+#                 data = colorT,
+#                 fixed = beta_00 + beta_01 + beta_10 + beta_11 ~ 1,
+#                 random = d_0i + d_1i ~ 1,
+#                 group = ~ ID,
+#                 start= c(beta_00 = 1694, beta_01 = -105, beta_10 = -184, beta_11= 16),
+#                 na.action = "na.omit",
+#                 control = nlmeControl(maxIter = 5000, tolerance = 200, msMaxIter = 1000),
+#                 verbose = TRUE)
+# #Summary of model estimates
+# summary(model.c)
 
 #OCT16
 #d1 <- subset(data, game_name == "color trick 1" & ID == "A1" & is_response_correct == TRUE)
