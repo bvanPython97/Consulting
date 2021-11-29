@@ -1,0 +1,124 @@
+#-------------- Script for Neuro Game Results-------------------#
+# Qing Gong
+# 16th OC 2021
+
+#load libraries
+
+library(tidyverse);library(ggplot2);library(gridExtra);library(lattice);
+
+#read in data
+#setwd("/Users/lutznm/Consulting")
+
+#dataFolder <- dir(setwd("C:/Users/gongqing/Desktop/original"))
+#df <- do.call(rbind, lapply(dataFolder, function(x) cbind(read.csv(x), name=strsplit(x,'//.')[[1]][1])))
+#df <- do.call(rbind, lapply(dataFolder, read.csv()))
+
+#input all original files
+temp = list.files(pattern="*.csv")
+#creates an environment containing all list components(csv file) as objects and then input them
+list2env(
+  lapply(setNames(temp, make.names(gsub("*.csv$", "", temp))), 
+         read.csv), envir = .GlobalEnv)
+
+#Cleaning 
+#1. user40 was a test case, which needs to be removed
+R1 <- round1_updated %>% filter(userid != 'user40')
+
+#2.Remove extra observation. For each student, they are supposed to do each game once. 
+#For each game, every one should have unique start time stamp
+#In R5, user6(B6) have two start time stamp for quick tap level 2, 2nd try is deleted here
+R5 <- round5_updated %>% filter(level_start_timestamp != "2021-03-25T18:55:58.767Z")
+
+#3. Add treatment information from NeurUX.Intrvention.Group file
+#extract id number from NeurUX.ID, add A to Id numbers for 2021 Fall or B for Spring 2021 
+#intervention 1 and control 0
+Intervention1 <- read.csv("NeurUX.Intervention.Group.csv") %>% 
+  slice(2:15) %>% 
+  mutate(ID = paste0('B', substr(NeurUX.ID, 5, 7))) %>% 
+  select(treatment= Intervention.Group, Study.ID, ID)
+
+Intervention2 <- read.csv("NeurUX.Intervention.Group.csv")%>%
+  slice(18:36) %>% 
+  mutate( ID = paste0('A', substr(NeurUX.ID, 5, 7))) %>% 
+  select(treatment= Intervention.Group, Study.ID, ID)
+
+#subset intervention data set with only ID and treatment status
+Intervention <- rbind(Intervention1, Intervention2)
+
+#add columns time_point 1(round1 and round4), 2(round 2 and round 5), 3(round 3 and round6)
+#Since subjects in two semester are different userID could be renamed to unique ID 
+#extract id number from ID, add A to Id numbers for subjects in 1 st semester or B for 2nd semester 
+
+R1 <- mutate(R1, time_point = 1, ID = paste0('A', substr(userid, 5, 7)))
+R2 <- mutate(round2_updated, time_point = 2, ID = paste0('A', substr(userid, 5, 7)))
+R3 <- mutate(round3_updated, time_point = 3, ID = paste0('A', substr(userid, 5, 7)))
+R4 <- mutate(round4_updated, time_point = 1, ID = paste0('B', substr(userid, 5, 7)))
+R5 <- mutate(R5, time_point = 2, ID = paste0('B', substr(userid, 5, 7)))
+R6 <- mutate(round6_updated, time_point = 3, ID = paste0('B', substr(userid, 5, 7)))
+
+#combine all data into one whole dataset
+R_all <- rbind(R1, R2, R3, R4, R5, R6)
+
+#Merge Intervention into R_all dataset
+data <- merge(R_all, Intervention, by = "ID")
+
+#double check treatment status right
+#data$treatment[data$ID == "B9"]
+
+
+#update Nov21 *********************************************************************
+#subset color trick
+colorTrick <- data %>% select (
+  game_name,
+  ID, Study.ID,
+  event_type,
+  is_response_correct,
+  response_reaction_time,
+  correct_count,
+  incorrect_count,
+  user_response,
+  mechanic_name,
+  time_point,
+  treatment
+) %>%
+  filter(game_name %in% c("color trick 1",
+                          "color trick 2",
+                          "color trick 3"),
+         event_type == "trial"
+         )
+sum(is.na(colorTrick))
+
+##calculate average reaction time and correct proportion for each subject at each time point for each color trick
+colorT <- colorTrick %>% filter(event_type == "trial" &
+                                  is_response_correct == TRUE) 
+color <- colorT %>% 
+  group_by(treatment,game_name, ID, Study.ID, time_point) %>%
+  summarise('average_RT' = sprintf("%0.2f", mean(response_reaction_time)),
+            prop_ncorrect = max(correct_count)/sum(max(correct_count) + max(incorrect_count)),
+            .groups = 'drop') 
+
+ch <- c("treatment", "game_name", "time_point")
+color[,ch] <- lapply(color[,ch], factor)
+
+color$average_RT <- as.numeric(color$average_RT)
+
+#check all intervention participants in smile data at T1
+sum(NeurUX.Intervention.Group$Study.ID %in% SMILE$StudyID_T1)
+
+#Read in SMILE DATA
+SMILE <- read.csv("SMILE full data 10 23 21_AARThesis_Deidentified_forNL.csv")  #  HS group = 1, Control group = 2
+
+
+SMILE$PHQ_T2_total[SMILE$StudyID_T1 == 22585621]   # should we remove this 26 > 25?
+SMILE$PHQ_T1_total[SMILE$StudyID_T1 == 22585602]   # 0 is this abnormal?
+
+#change control group = 2 into 0
+SMILE$treatment1 <- ifelse(SMILE$Group_HSvsNoHS == 1, 1, 0)
+
+PHQ <- SMILE %>% 
+  select(StudyID_T1, Gender_Numeric_T1, MotherEdu_T1, ParentalHouseholdIncome_T1,Grade_T1, AgeExact_T1, PHQ_T1_total, PHQ_T2_total, PHQ_T3_total, treatment1) %>% 
+  rename(Study.ID = StudyID_T1, "1"=PHQ_T1_total, "2"=PHQ_T2_total, "3"=PHQ_T3_total) %>% 
+  gather("1", "2", "3", key = time_point, value="PHQ")       #change wide-format PHQ for 3 time points into long format
+  
+ ##combine PHQ and Neuro-ux
+PHQ_UX <- left_join(color, PHQ, by = c("Study.ID", "time_point"))
