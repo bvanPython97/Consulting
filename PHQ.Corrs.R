@@ -278,3 +278,60 @@ head(T1.Corrs[order(T1.Corrs$Corr),])
 #Incorrect quick tap answers are positively correlated with PHQ
 #Correct answers on CT3 are similarly positvely correlated (less)
 head(T1.Corrs[order(-T1.Corrs$Corr),])
+
+T1Viz <- data.frame(Time1Corrs.Wide)
+
+neg1<-
+T1Viz%>%
+  ggplot(aes(x = tot.correct_quick.tap.level.2, y = PHQ.Score))+
+  geom_jitter()+
+  geom_smooth(method = "lm", formula = "y ~ x")
+
+neg2<-
+T1Viz%>%
+  ggplot(aes(x = prop.correct_quick.tap.level.2, y = PHQ.Score))+
+  geom_jitter()+
+  geom_smooth(method = "lm", formula = "y ~ x")
+
+neg3<-
+T1Viz%>%
+  ggplot(aes(x = tot.incorrect_color.trick.3, y = PHQ.Score))+
+  geom_jitter()+
+  geom_smooth(method = "lm", formula = "y ~ x")
+
+neg4<-
+  T1Viz%>%
+  ggplot(aes(x = avgRT_color.trick.1, y = PHQ.Score))+
+  geom_jitter()+
+  geom_smooth(method = "lm", formula = "y ~ x")
+
+pos1 <-
+T1Viz%>%
+  ggplot(aes(x = tot.incorrect_quick.tap.level.2, y = PHQ.Score))+
+  geom_jitter()+
+  geom_smooth(method = "lm", formula = "y ~ x")
+
+pos2 <-
+T1Viz%>%
+  ggplot(aes(x = tot.correct_color.trick.3, y = PHQ.Score))+
+  geom_jitter()+
+  geom_smooth(method = "lm", formula = "y ~ x")
+
+pos3 <-
+T1Viz%>%
+  ggplot(aes(x = prop.correct_color.trick.3, y = PHQ.Score))+
+  geom_jitter()+
+  geom_smooth(method = "lm", formula = "y ~ x")
+
+library(ggpubr)
+
+ggarrange(neg1, neg2, neg3, neg4,
+          labels = c("QT Total Correct", "QT Proportion Correct",
+                     "CT3 Total Incorrect", "CT1 Reaction Time"))
+
+ggarrange(pos1, 
+          ggarrange(pos2,
+                    pos3,
+                    ncol = 2,
+                    labels = c("CT3 Total Correct", "CT3 Proportion Correct")),
+          nrow = 2, labels = "QT Total Incorrect")
