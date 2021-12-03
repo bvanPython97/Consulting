@@ -43,6 +43,12 @@ str(Full)
 Full <- Full%>%
   filter(ID != 140)
 
+#Making timepoint into a factor for later use
+Full$tp_fac <- ordered(Full$timepoint,
+                       levels = c(1, 2, 3),
+                       labels = c("Time 1", "Time 2", "Time 3")
+)
+
 #NeurUX data needs to be reformatted a bit before we can merge
 
 IntKey <- read.csv("NeurUX.Intervention.Group.csv")
@@ -83,7 +89,10 @@ sem2 <- c(22585612,
           22585630)
 
 IntKey <- mutate(IntKey, semester = case_when(Study.ID %in% sem1 ~ 1,
-                                               Study.ID %in% sem2 ~ 2))
+                                               Study.ID %in% sem2 ~ 2),
+                          Int.Fac = factor(Intervention.Group,
+                                           levels = c(0, 1),
+                                           labels = c("Control", "Intervention")))
 IntKey1 <-filter(IntKey, semester == 1)
 IntKey1 <- mutate(IntKey1, ID = as.factor(as.numeric(gsub("user", "", NeurUX.ID))+100))
 
@@ -105,55 +114,171 @@ Merge.1 <- merge(
 #Trimming SMILE dataset so it only contains the variables we need
 
 smile <- read.csv("SMILE full data 10 23 21_AARThesis_Deidentified_forNL.csv")
+view(smile)
+smile2 <- pivot_longer(smile,
+                    cols = c(PHQ_T1_total, PHQ_T2_total, PHQ_T3_total),
+                    names_to = "Time",
+                    values_to = "PHQ.Score")
 
-smile2 <- select(smile, StudyID_T1, PHQ_T1_total, PHQ_T2_total, PHQ_T3_total)
+smile2 <- mutate(smile2, numTime = case_when(Time == "PHQ_T1_total" ~ 1,
+                                             Time == "PHQ_T2_total" ~ 2,
+                                             Time == "PHQ_T3_total" ~ 3))
+
+smile2 <- select(smile2, StudyID_T1, numTime, PHQ.Score)
+
+str(smile2)
 
 #Can now merge with SMILE data
 Merge.2 <- merge(
                  x = Merge.1,
                  y = smile2,
-                 by.x = "Study.ID",
-                 by.y = "StudyID_T1"
+                 by.x = c("Study.ID", "timepoint"),
+                 by.y = c("StudyID_T1", "numTime")
 )
 
 view(Merge.2)
 
-Scores<-filter(Merge.2, event_type == "scorecard")
+#Checking that PHQ scores match dataset (correct)
+Merge.2%>%
+  group_by(Study.ID, timepoint)%>%
+  summarize(PHQ = mean(PHQ.Score))
 
-Scores%>%
-  filter(timepoint == 1)%>%
-  filter(game_name =="color trick 1")%>%
-  ggplot(aes(x = PHQ_T1_total, y = average_reaction_time))+
-  geom_jitter()
+#Below is the scorecard version of the data. I only did this for convenience sake
 
-Scores%>%
-  filter(timepoint == 1)%>%
-  filter(average_reaction_time < 4000)%>%
-  ggplot(aes(x = PHQ_T1_total, y = average_reaction_time))+
-  geom_jitter()+
-  facet_grid(.~game_name)
+# Scores<-filter(Merge.2, event_type == "scorecard")
+# 
+# Scores%>%
+#   filter(timepoint == 1)%>%
+#   filter(game_name =="color trick 1")%>%
+#   ggplot(aes(x = PHQ_T1_total, y = average_reaction_time))+
+#   geom_jitter()
+# 
+# Scores%>%
+#   filter(timepoint == 1)%>%
+#   filter(average_reaction_time < 4000)%>%
+#   ggplot(aes(x = PHQ_T1_total, y = average_reaction_time))+
+#   geom_jitter()+
+#   facet_grid(.~game_name)
+# 
+# Scores%>%
+#   filter(timepoint == 1)%>%
+#   ggplot(aes(x = PHQ_T1_total, y = correct_count))+
+#   geom_jitter()+
+#   facet_grid(.~game_name)
+# 
+# Scores%>%
+#   filter(timepoint == 1)%>%
+#   ggplot(aes(x = average_reaction_time, y = correct_count))+
+#   geom_jitter()+
+#   facet_grid(.~game_name)
+# 
+# Scores%>%
+#   filter(timepoint == 1)%>%
+#   filter(average_reaction_time < 4000)%>%
+#   group_by(game_name)%>%
+#   summarize(corr_RT = cor(PHQ_T1_total, average_reaction_time),
+#             corr_right = cor(PHQ_T1_total, correct_count))
 
-Scores%>%
-  filter(timepoint == 1)%>%
-  ggplot(aes(x = PHQ_T1_total, y = correct_count))+
-  geom_jitter()+
-  facet_grid(.~game_name)
+#Summary of PHQ scores at each timepoint
+summary(smile$PHQ_T1_total)
+summary(smile$PHQ_T2_total)
+summary(smile$PHQ_T3_total)
 
-Scores%>%
-  filter(timepoint == 1)%>%
-  ggplot(aes(x = average_reaction_time, y = correct_count))+
-  geom_jitter()+
-  facet_grid(.~game_name)
+#Created this to look at distributions of PHQ scores over time
 
-Scores%>%
-  filter(timepoint == 1)%>%
-  filter(average_reaction_time < 4000)%>%
-  group_by(game_name)%>%
-  summarize(corr_RT = cor(PHQ_T1_total, average_reaction_time),
-            corr_right = cor(PHQ_T1_total, correct_count))
+#This is just to get a single row for each person
+viz <- filter(Merge.2, event_type == "scorecard")
+viz <- filter(viz, game_name == "color trick 1")
 
-#Making timepoint into a factor for later use
-Full$tp_fac <- ordered(Full$timepoint,
-                       levels = c(1, 2, 3),
-                       labels = c("Time 1", "Time 2", "Time 3")
-)
+#Selecting relevant columns
+scoresPHQ <- c("ID", "timepoint", "PHQ.Score", "Int.Fac")
+viz <- viz[scoresPHQ]
+
+viz <- mutate(viz, timefac = factor(timepoint))
+
+str(viz)
+
+#Faceted across timepoint and intervention group
+viz%>%
+  ggplot(aes(x = PHQ.Score, fill = timefac))+
+  geom_histogram(aes(y = ..density..), alpha = .5, binwidth = 1.5)+
+  geom_density(alpha = .5, adjust = 1.5)+
+  facet_grid(timefac ~ Int.Fac)+
+  xlim(0 , 27)
+
+#Can also use boxplot/violin plot overlays
+viz%>%
+  ggplot(aes(x = timefac, y = PHQ.Score, fill = timefac))+
+  geom_violin(alpha = .1, adjust = 1.5)+
+  geom_boxplot(alpha = .5)+
+  facet_grid(Int.Fac~.)
+
+#This plot shows a bit more clearly what is going on in terms of trends
+viz%>%
+  ggplot(aes(x = timepoint, y = PHQ.Score, color = Int.Fac))+
+  geom_jitter(width = .1)+
+  geom_smooth(se = FALSE, method = "lm")+
+  facet_wrap(.~Int.Fac)
+ggsave(
+  "PHQ.Overall.Trajectories.png",
+  plot = last_plot())
+
+viz%>%
+  group_by(Int.Fac, timefac)%>%
+  summarize(min   = min  (PHQ.Score, na.rm = TRUE),
+            max   = max  (PHQ.Score, na.rm = TRUE),
+            mean  = mean (PHQ.Score, na.rm = TRUE),
+            sd    = sd   (PHQ.Score, na.rm = TRUE),
+            count = n())
+
+#Can see the paneled plots below (trajectories for each person)
+viz%>%
+  filter(Int.Fac == "Control")%>%
+  ggplot(aes(x = timepoint, y = PHQ.Score))+
+  geom_point()+
+  geom_smooth(se = FALSE,
+              method = "lm",
+              formula = "y ~ x",
+              lty = "dashed",
+              size = .5)+
+  facet_wrap(.~ID)
+
+ggsave(
+  "PHQ.Control.Trajectories.png",
+  plot = last_plot())
+
+viz%>%
+  filter(Int.Fac == "Intervention")%>%
+  ggplot(aes(x = timepoint, y = PHQ.Score))+
+  geom_point()+
+  geom_smooth(se = FALSE,
+              method = "lm",
+              formula = "y ~ x",
+              lty = "dashed",
+              size = .5)+
+  facet_wrap(.~ID)
+
+ggsave(
+  "PHQ.Intervention.Trajectories.png",
+  plot = last_plot())
+
+#Can also do "spaghetti plots" although these don't look great because of the variability
+#in PHQ scores
+viz%>%
+  ggplot(aes(x = timepoint, y = PHQ.Score, color = ID))+
+  geom_point()+
+  geom_smooth(se = FALSE,
+              method = "lm",
+              formula = "y ~ x",
+              size = .5)+
+  facet_wrap(.~Int.Fac)+
+  theme(legend.position = "none")
+
+ggsave(
+  "Spaghetti.Plots.png",
+  plot = last_plot())
+
+#Next step is to create average reaction times, correct responses, and proportion correct for
+#each game. From here, we'll figure out which is the best representation of depression
+#Moving this out of this script to start from scratch
+write.csv(Merge.2, "MergedData.csv")
