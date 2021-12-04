@@ -1,3 +1,4 @@
+library(tidyverse)
 df <- read.csv("MergedData.csv")
 
 str(df)
@@ -217,12 +218,25 @@ PHQ.Corrs <- merge(
   by.y = c("StudyID_T1", "numTime"))
 
 str(PHQ.Corrs)
+write.csv(PHQ.Corrs, "1204.Merge.csv")
 
 library(corrplot)
 
 PHQ.Corrs%>%
   ggplot(aes(x = avgRT, y = PHQ.Score))+
   geom_point()+
+  geom_smooth(method = "lm")+
+  facet_grid(game_name ~ timepoint)
+
+PHQ.Corrs%>%
+  ggplot(aes(x = tot.correct, y = PHQ.Score))+
+  geom_jitter()+
+  geom_smooth(method = "lm")+
+  facet_grid(game_name ~ timepoint)
+
+PHQ.Corrs%>%
+  ggplot(aes(x = prop.correct, y = PHQ.Score))+
+  geom_jitter()+
   geom_smooth(method = "lm")+
   facet_grid(game_name ~ timepoint)
 
@@ -260,7 +274,7 @@ Time3Corrs.Wide <- pivot_wider(Time3Corrs,
 str(Time1Corrs.Wide)
 
 T1s <- data.frame(Time1Corrs.Wide[9:29])
-T1s <- mutate_if(T1CRCT, is.integer, as.numeric)
+T1s <- mutate_if(T1s, is.integer, as.numeric)
 str(T1s)
 T1 <- cor(T1s)
 #We can look at the full correlations, but all we care about is PHQ
@@ -335,3 +349,68 @@ ggarrange(pos1,
                     ncol = 2,
                     labels = c("CT3 Total Correct", "CT3 Proportion Correct")),
           nrow = 2, labels = "QT Total Incorrect")
+
+#I'm also interested in using model selection techniques to see which variables predict PHQ
+
+#Note that the model has singularity problems because high level of overlap
+#For example, correct and incorrect obviously are not independent.
+lmod <- lm(PHQ.Score ~ ., data = T1s)
+summary(lmod)
+
+#This call shows us which predictors (1-9) should be included in the model
+library(leaps)
+AIC <- regsubsets(PHQ.Score ~ ., data = T1s)
+rs <- summary(AIC)
+rs$which
+
+#We can plot it to see the best number of predictors
+#We can get an idea of the optimal number of predictors based on the minimum of the plot
+AIC2 <- 50*log(rs$rss/50) + (2:10)*2
+plot(AIC2 ~ I(1:9), ylab = "AIC", xlab = "# of Predictors")
+#We see five predictors are ideal
+
+#The command below shows us the five predictors are:
+#CT3 Total Correct
+#HS Total Incorrect
+#QT Total Incorrect
+#QT Reaction Time
+#CT1 Reaction Time
+rs$which[5,]
+
+#Adjusted R Square corrects for the number of predictors
+#In this case, we see six predictors is the best option
+plot(2:10, rs$adjr2, ylab = "Adj. R^2", xlab = "# of Parameters")
+rs$which[6,] #The added predictor is reaction time for CT3
+
+#Mallow's CP suggests 3 predictors may be ideal
+plot(2:10, rs$cp, ylab = "CP Statistic", xlab = "# of Parameters")
+rs$which[3,] #The only three are QT total correct, CT1 reaction time, and CT3 proportion correct
+
+lmodAIC <- lm(PHQ.Score ~ tot.correct_color.trick.3 +
+                          tot.incorrect_hand.swype +
+                          tot.incorrect_quick.tap.level.2 +
+                          avgRT_quick.tap.level.2 +
+                          avgRT_color.trick.1 , data = T1s)
+
+summary(lmodAIC)
+#We see that missing questions on quick tap is associated with depression
+#Slower reaction times on color trick 1 are associated with more depression
+#More correct questions on color trick 3 are asssociated with more depression
+
+lmodRsq <- lm(PHQ.Score ~ tot.correct_color.trick.3 +
+                tot.incorrect_hand.swype +
+                tot.incorrect_quick.tap.level.2 +
+                avgRT_quick.tap.level.2 +
+                avgRT_color.trick.1 +
+                avgRT_color.trick.3, data = T1s)
+
+summary(lmodRsq)
+#Here, the same predictors are all significant
+
+lmodMallow <- lm(PHQ.Score ~ tot.correct_quick.tap.level.2 +
+                             prop.correct_color.trick.3 +
+                             avgRT_color.trick.1, data = T1s)
+
+summary(lmodMallow)
+#Total correct on quick tap was negatively associated with depression
+#Slower reaction times on color trick one were also negatively associated with depression
