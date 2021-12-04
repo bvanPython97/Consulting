@@ -1,0 +1,437 @@
+"","Study.ID","timepoint","ID","game_name","tot.correct","tot.incorrect","prop.correct","avgRT","X","NeurUX.ID","Headspace.ID","Intervention.Group","semester","Int.Fac","PHQ.Score"
+"1",22585580,1,"101","color trick 1",9,0,1,895.777777777778,"","user1","SCILOY-139ZCT",1,1,"Intervention",16
+"2",22585580,1,"101","color trick 2",9,0,1,979.111111111111,"","user1","SCILOY-139ZCT",1,1,"Intervention",16
+"3",22585580,1,"101","color trick 3",9,0,1,1056.11111111111,"","user1","SCILOY-139ZCT",1,1,"Intervention",16
+"4",22585580,1,"101","hand swype",30,5,0.857142857142857,1655.2,"","user1","SCILOY-139ZCT",1,1,"Intervention",16
+"5",22585580,1,"101","quick tap level 2",13,2,0.866666666666667,463.111111111111,"","user1","SCILOY-139ZCT",1,1,"Intervention",16
+"6",22585580,2,"101","color trick 1",9,0,1,711.444444444444,"","user1","SCILOY-139ZCT",1,1,"Intervention",10
+"7",22585580,2,"101","color trick 2",9,0,1,819.444444444444,"","user1","SCILOY-139ZCT",1,1,"Intervention",10
+"8",22585580,2,"101","color trick 3",9,0,1,1007.55555555556,"","user1","SCILOY-139ZCT",1,1,"Intervention",10
+"9",22585580,2,"101","hand swype",32,1,0.96969696969697,1796.24242424242,"","user1","SCILOY-139ZCT",1,1,"Intervention",10
+"10",22585580,2,"101","quick tap level 2",15,0,1,427.636363636364,"","user1","SCILOY-139ZCT",1,1,"Intervention",10
+"11",22585580,3,"101","color trick 1",9,0,1,639.555555555556,"","user1","SCILOY-139ZCT",1,1,"Intervention",4
+"12",22585580,3,"101","color trick 2",9,0,1,714,"","user1","SCILOY-139ZCT",1,1,"Intervention",4
+"13",22585580,3,"101","color trick 3",9,0,1,923.888888888889,"","user1","SCILOY-139ZCT",1,1,"Intervention",4
+"14",22585580,3,"101","hand swype",33,2,0.942857142857143,1697.54285714286,"","user1","SCILOY-139ZCT",1,1,"Intervention",4
+"15",22585580,3,"101","quick tap level 2",14,1,0.933333333333333,420.545454545455,"","user1","SCILOY-139ZCT",1,1,"Intervention",4
+"16",22585581,1,"107","color trick 1",9,0,1,773.111111111111,"","user7","SCILOY-NDWT0Q",1,1,"Intervention",9
+"17",22585581,1,"107","color trick 2",8,1,0.888888888888889,1667.66666666667,"","user7","SCILOY-NDWT0Q",1,1,"Intervention",9
+"18",22585581,1,"107","color trick 3",5,4,0.555555555555556,1806.14285714286,"","user7","SCILOY-NDWT0Q",1,1,"Intervention",9
+"19",22585581,1,"107","hand swype",19,20,0.487179487179487,1454.53846153846,"","user7","SCILOY-NDWT0Q",1,1,"Intervention",9
+"20",22585581,1,"107","quick tap level 2",15,0,1,488,"","user7","SCILOY-NDWT0Q",1,1,"Intervention",9
+"21",22585581,2,"107","color trick 1",9,0,1,885.444444444444,"","user7","SCILOY-NDWT0Q",1,1,"Intervention",9
+"22",22585581,2,"107","color trick 2",9,0,1,1095.44444444444,"","user7","SCILOY-NDWT0Q",1,1,"Intervention",9
+"23",22585581,2,"107","color trick 3",9,0,1,1401.22222222222,"","user7","SCILOY-NDWT0Q",1,1,"Intervention",9
+"24",22585581,2,"107","hand swype",19,1,0.95,2352.52941176471,"","user7","SCILOY-NDWT0Q",1,1,"Intervention",9
+"25",22585581,2,"107","quick tap level 2",15,0,1,447.428571428571,"","user7","SCILOY-NDWT0Q",1,1,"Intervention",9
+"26",22585581,3,"107","color trick 1",9,0,1,714.888888888889,"","user7","SCILOY-NDWT0Q",1,1,"Intervention",9
+"27",22585581,3,"107","color trick 2",9,0,1,904.777777777778,"","user7","SCILOY-NDWT0Q",1,1,"Intervention",9
+"28",22585581,3,"107","color trick 3",8,1,0.888888888888889,1050.11111111111,"","user7","SCILOY-NDWT0Q",1,1,"Intervention",9
+"29",22585581,3,"107","hand swype",24,2,0.923076923076923,2231.07692307692,"","user7","SCILOY-NDWT0Q",1,1,"Intervention",9
+"30",22585581,3,"107","quick tap level 2",15,0,1,460.333333333333,"","user7","SCILOY-NDWT0Q",1,1,"Intervention",9
+"31",22585582,1,"112","color trick 1",9,0,1,693.222222222222,"","user12","SCILOY-U19AOQ",1,1,"Intervention",17
+"32",22585582,1,"112","color trick 2",9,0,1,969,"","user12","SCILOY-U19AOQ",1,1,"Intervention",17
+"33",22585582,1,"112","color trick 3",9,0,1,1318.44444444444,"","user12","SCILOY-U19AOQ",1,1,"Intervention",17
+"34",22585582,1,"112","hand swype",23,2,0.92,2355.88,"","user12","SCILOY-U19AOQ",1,1,"Intervention",17
+"35",22585582,1,"112","quick tap level 2",14,1,0.933333333333333,439.583333333333,"","user12","SCILOY-U19AOQ",1,1,"Intervention",17
+"36",22585582,2,"112","color trick 1",9,0,1,803.555555555556,"","user12","SCILOY-U19AOQ",1,1,"Intervention",18
+"37",22585582,2,"112","color trick 2",9,0,1,877,"","user12","SCILOY-U19AOQ",1,1,"Intervention",18
+"38",22585582,2,"112","color trick 3",9,0,1,1384.55555555556,"","user12","SCILOY-U19AOQ",1,1,"Intervention",18
+"39",22585582,2,"112","hand swype",27,1,0.964285714285714,2058.25,"","user12","SCILOY-U19AOQ",1,1,"Intervention",18
+"40",22585582,2,"112","quick tap level 2",15,0,1,432.285714285714,"","user12","SCILOY-U19AOQ",1,1,"Intervention",18
+"41",22585582,3,"112","color trick 1",9,0,1,737.333333333333,"","user12","SCILOY-U19AOQ",1,1,"Intervention",15
+"42",22585582,3,"112","color trick 2",9,0,1,1175.77777777778,"","user12","SCILOY-U19AOQ",1,1,"Intervention",15
+"43",22585582,3,"112","color trick 3",8,1,0.888888888888889,1087,"","user12","SCILOY-U19AOQ",1,1,"Intervention",15
+"44",22585582,3,"112","hand swype",32,1,0.96969696969697,1741.84848484848,"","user12","SCILOY-U19AOQ",1,1,"Intervention",15
+"45",22585582,3,"112","quick tap level 2",15,0,1,442.833333333333,"","user12","SCILOY-U19AOQ",1,1,"Intervention",15
+"46",22585583,2,"115","color trick 1",9,0,1,886.625,"","user15","SCILOY-RJASW8",1,1,"Intervention",22
+"47",22585583,2,"115","color trick 2",5,4,0.555555555555556,1954.125,"","user15","SCILOY-RJASW8",1,1,"Intervention",22
+"48",22585583,2,"115","color trick 3",7,2,0.777777777777778,1740.66666666667,"","user15","SCILOY-RJASW8",1,1,"Intervention",22
+"49",22585583,2,"115","hand swype",31,6,0.837837837837838,1583.40540540541,"","user15","SCILOY-RJASW8",1,1,"Intervention",22
+"50",22585583,2,"115","quick tap level 2",14,1,0.933333333333333,444.375,"","user15","SCILOY-RJASW8",1,1,"Intervention",22
+"51",22585586,1,"108","color trick 1",9,0,1,832.444444444444,"","user8","SCILOY-023ZTN",1,1,"Intervention",15
+"52",22585586,1,"108","color trick 2",9,0,1,2030.44444444444,"","user8","SCILOY-023ZTN",1,1,"Intervention",15
+"53",22585586,1,"108","color trick 3",7,2,0.777777777777778,2367.71428571429,"","user8","SCILOY-023ZTN",1,1,"Intervention",15
+"54",22585586,1,"108","hand swype",21,15,0.583333333333333,1608.91666666667,"","user8","SCILOY-023ZTN",1,1,"Intervention",15
+"55",22585586,1,"108","quick tap level 2",15,0,1,542.333333333333,"","user8","SCILOY-023ZTN",1,1,"Intervention",15
+"56",22585586,2,"108","color trick 1",9,0,1,939.222222222222,"","user8","SCILOY-023ZTN",1,1,"Intervention",3
+"57",22585586,2,"108","color trick 2",9,0,1,1410.66666666667,"","user8","SCILOY-023ZTN",1,1,"Intervention",3
+"58",22585586,2,"108","color trick 3",9,0,1,2138.55555555556,"","user8","SCILOY-023ZTN",1,1,"Intervention",3
+"59",22585586,2,"108","hand swype",19,21,0.475,1474.375,"","user8","SCILOY-023ZTN",1,1,"Intervention",3
+"60",22585586,2,"108","quick tap level 2",15,0,1,537.333333333333,"","user8","SCILOY-023ZTN",1,1,"Intervention",3
+"61",22585586,3,"108","color trick 1",9,0,1,1237.44444444444,"","user8","SCILOY-023ZTN",1,1,"Intervention",3
+"62",22585586,3,"108","color trick 2",9,0,1,1315.33333333333,"","user8","SCILOY-023ZTN",1,1,"Intervention",3
+"63",22585586,3,"108","color trick 3",9,0,1,1843.55555555556,"","user8","SCILOY-023ZTN",1,1,"Intervention",3
+"64",22585586,3,"108","hand swype",18,14,0.5625,1801.96875,"","user8","SCILOY-023ZTN",1,1,"Intervention",3
+"65",22585586,3,"108","quick tap level 2",15,0,1,528.888888888889,"","user8","SCILOY-023ZTN",1,1,"Intervention",3
+"66",22585588,2,"110","color trick 1",9,0,1,778.111111111111,"","user10","SCILOY-WVSDYY",1,1,"Intervention",14
+"67",22585588,2,"110","color trick 2",9,0,1,1695.22222222222,"","user10","SCILOY-WVSDYY",1,1,"Intervention",14
+"68",22585588,2,"110","color trick 3",6,3,0.666666666666667,1384.55555555556,"","user10","SCILOY-WVSDYY",1,1,"Intervention",14
+"69",22585588,2,"110","hand swype",19,13,0.59375,1731.25806451613,"","user10","SCILOY-WVSDYY",1,1,"Intervention",14
+"70",22585588,2,"110","quick tap level 2",15,0,1,486.5,"","user10","SCILOY-WVSDYY",1,1,"Intervention",14
+"71",22585588,3,"110","color trick 1",9,0,1,675.777777777778,"","user10","SCILOY-WVSDYY",1,1,"Intervention",12
+"72",22585588,3,"110","color trick 2",9,0,1,976.111111111111,"","user10","SCILOY-WVSDYY",1,1,"Intervention",12
+"73",22585588,3,"110","color trick 3",9,0,1,899,"","user10","SCILOY-WVSDYY",1,1,"Intervention",12
+"74",22585588,3,"110","hand swype",26,15,0.634146341463415,1426.29268292683,"","user10","SCILOY-WVSDYY",1,1,"Intervention",12
+"75",22585588,3,"110","quick tap level 2",15,0,1,474.428571428571,"","user10","SCILOY-WVSDYY",1,1,"Intervention",12
+"76",22585591,1,"119","color trick 1",8,1,0.888888888888889,722.777777777778,"","user19","SCILOY-D4VVJ8",1,1,"Intervention",2
+"77",22585591,1,"119","color trick 2",6,3,0.666666666666667,1623.625,"","user19","SCILOY-D4VVJ8",1,1,"Intervention",2
+"78",22585591,1,"119","color trick 3",9,0,1,1779.33333333333,"","user19","SCILOY-D4VVJ8",1,1,"Intervention",2
+"79",22585591,1,"119","hand swype",29,8,0.783783783783784,1437.52777777778,"","user19","SCILOY-D4VVJ8",1,1,"Intervention",2
+"80",22585591,1,"119","quick tap level 2",15,0,1,436.333333333333,"","user19","SCILOY-D4VVJ8",1,1,"Intervention",2
+"81",22585591,2,"119","quick tap level 2",15,0,1,650.428571428571,"","user19","SCILOY-D4VVJ8",1,1,"Intervention",2
+"82",22585591,3,"119","color trick 1",9,0,1,625.555555555556,"","user19","SCILOY-D4VVJ8",1,1,"Intervention",0
+"83",22585591,3,"119","color trick 2",5,4,0.555555555555556,2033.5,"","user19","SCILOY-D4VVJ8",1,1,"Intervention",0
+"84",22585591,3,"119","color trick 3",6,3,0.666666666666667,2411.77777777778,"","user19","SCILOY-D4VVJ8",1,1,"Intervention",0
+"85",22585591,3,"119","hand swype",17,10,0.62962962962963,2063.51851851852,"","user19","SCILOY-D4VVJ8",1,1,"Intervention",0
+"86",22585591,3,"119","quick tap level 2",14,1,0.933333333333333,345.166666666667,"","user19","SCILOY-D4VVJ8",1,1,"Intervention",0
+"87",22585592,1,"105","color trick 1",9,0,1,1343.88888888889,"","user5","SCILOY-1WBQ6M",1,1,"Intervention",12
+"88",22585592,1,"105","color trick 2",8,1,0.888888888888889,830.333333333333,"","user5","SCILOY-1WBQ6M",1,1,"Intervention",12
+"89",22585592,1,"105","color trick 3",9,0,1,1275,"","user5","SCILOY-1WBQ6M",1,1,"Intervention",12
+"90",22585592,1,"105","hand swype",16,15,0.516129032258065,1777.6,"","user5","SCILOY-1WBQ6M",1,1,"Intervention",12
+"91",22585592,1,"105","quick tap level 2",15,0,1,537.5,"","user5","SCILOY-1WBQ6M",1,1,"Intervention",12
+"92",22585592,2,"105","color trick 1",9,0,1,686.111111111111,"","user5","SCILOY-1WBQ6M",1,1,"Intervention",4
+"93",22585592,2,"105","color trick 2",8,1,0.888888888888889,917.333333333333,"","user5","SCILOY-1WBQ6M",1,1,"Intervention",4
+"94",22585592,2,"105","color trick 3",9,0,1,1250,"","user5","SCILOY-1WBQ6M",1,1,"Intervention",4
+"95",22585592,2,"105","hand swype",28,15,0.651162790697674,1354.09302325581,"","user5","SCILOY-1WBQ6M",1,1,"Intervention",4
+"96",22585592,2,"105","quick tap level 2",15,0,1,516.666666666667,"","user5","SCILOY-1WBQ6M",1,1,"Intervention",4
+"97",22585593,1,"114","color trick 1",9,0,1,788.222222222222,"","user14","SCILOY-7PMPR8",1,1,"Intervention",13
+"98",22585593,1,"114","color trick 2",9,0,1,834.222222222222,"","user14","SCILOY-7PMPR8",1,1,"Intervention",13
+"99",22585593,1,"114","color trick 3",8,1,0.888888888888889,1466,"","user14","SCILOY-7PMPR8",1,1,"Intervention",13
+"100",22585593,1,"114","hand swype",60,14,0.810810810810811,1566.51351351351,"","user14","SCILOY-7PMPR8",1,1,"Intervention",13
+"101",22585593,1,"114","quick tap level 2",15,0,1,465.272727272727,"","user14","SCILOY-7PMPR8",1,1,"Intervention",13
+"102",22585593,2,"114","color trick 1",9,0,1,832.555555555556,"","user14","SCILOY-7PMPR8",1,1,"Intervention",10
+"103",22585593,2,"114","color trick 2",6,3,0.666666666666667,1736,"","user14","SCILOY-7PMPR8",1,1,"Intervention",10
+"104",22585593,2,"114","color trick 3",9,0,1,1261.77777777778,"","user14","SCILOY-7PMPR8",1,1,"Intervention",10
+"105",22585593,2,"114","hand swype",26,7,0.787878787878788,1777.15151515152,"","user14","SCILOY-7PMPR8",1,1,"Intervention",10
+"106",22585593,2,"114","quick tap level 2",14,1,0.933333333333333,434.4,"","user14","SCILOY-7PMPR8",1,1,"Intervention",10
+"107",22585593,3,"114","color trick 1",9,0,1,854.777777777778,"","user14","SCILOY-7PMPR8",1,1,"Intervention",13
+"108",22585593,3,"114","color trick 2",9,0,1,1647.11111111111,"","user14","SCILOY-7PMPR8",1,1,"Intervention",13
+"109",22585593,3,"114","color trick 3",6,3,0.666666666666667,1696.11111111111,"","user14","SCILOY-7PMPR8",1,1,"Intervention",13
+"110",22585593,3,"114","hand swype",23,3,0.884615384615385,2254,"","user14","SCILOY-7PMPR8",1,1,"Intervention",13
+"111",22585593,3,"114","quick tap level 2",14,1,0.933333333333333,476,"","user14","SCILOY-7PMPR8",1,1,"Intervention",13
+"112",22585594,1,"109","color trick 1",9,0,1,1589.77777777778,"","user 9","SCILOY-1SSLJ9",1,1,"Intervention",7
+"113",22585594,1,"109","color trick 2",9,0,1,854.777777777778,"","user 9","SCILOY-1SSLJ9",1,1,"Intervention",7
+"114",22585594,1,"109","color trick 3",8,1,0.888888888888889,1089.55555555556,"","user 9","SCILOY-1SSLJ9",1,1,"Intervention",7
+"115",22585594,1,"109","hand swype",18,7,0.72,2336.24,"","user 9","SCILOY-1SSLJ9",1,1,"Intervention",7
+"116",22585594,1,"109","quick tap level 2",13,2,0.866666666666667,427.375,"","user 9","SCILOY-1SSLJ9",1,1,"Intervention",7
+"117",22585594,2,"109","color trick 1",9,0,1,1379.25,"","user 9","SCILOY-1SSLJ9",1,1,"Intervention",3
+"118",22585594,2,"109","color trick 2",9,0,1,1528.33333333333,"","user 9","SCILOY-1SSLJ9",1,1,"Intervention",3
+"119",22585594,2,"109","color trick 3",8,1,0.888888888888889,1304.625,"","user 9","SCILOY-1SSLJ9",1,1,"Intervention",3
+"120",22585594,2,"109","hand swype",26,3,0.896551724137931,2012.44827586207,"","user 9","SCILOY-1SSLJ9",1,1,"Intervention",3
+"121",22585594,2,"109","quick tap level 2",11,4,0.733333333333333,690.090909090909,"","user 9","SCILOY-1SSLJ9",1,1,"Intervention",3
+"122",22585594,3,"109","color trick 1",8,1,0.888888888888889,876.777777777778,"","user 9","SCILOY-1SSLJ9",1,1,"Intervention",14
+"123",22585594,3,"109","color trick 2",9,0,1,703.222222222222,"","user 9","SCILOY-1SSLJ9",1,1,"Intervention",14
+"124",22585594,3,"109","color trick 3",9,0,1,1115,"","user 9","SCILOY-1SSLJ9",1,1,"Intervention",14
+"125",22585594,3,"109","hand swype",27,3,0.9,1934.8,"","user 9","SCILOY-1SSLJ9",1,1,"Intervention",14
+"126",22585594,3,"109","quick tap level 2",14,1,0.933333333333333,420.3,"","user 9","SCILOY-1SSLJ9",1,1,"Intervention",14
+"127",22585596,1,"102","color trick 1",9,0,1,1031.11111111111,"","user2","SCILOY-R366PL",1,1,"Intervention",12
+"128",22585596,1,"102","color trick 2",6,3,0.666666666666667,2770,"","user2","SCILOY-R366PL",1,1,"Intervention",12
+"129",22585596,1,"102","color trick 3",7,2,0.777777777777778,2138.75,"","user2","SCILOY-R366PL",1,1,"Intervention",12
+"130",22585596,1,"102","hand swype",33,23,0.589285714285714,971.672727272727,"","user2","SCILOY-R366PL",1,1,"Intervention",12
+"131",22585596,1,"102","quick tap level 2",14,1,0.933333333333333,419.75,"","user2","SCILOY-R366PL",1,1,"Intervention",12
+"132",22585596,2,"102","color trick 1",9,0,1,783.888888888889,"","user2","SCILOY-R366PL",1,1,"Intervention",16
+"133",22585596,2,"102","color trick 2",9,0,1,1043.88888888889,"","user2","SCILOY-R366PL",1,1,"Intervention",16
+"134",22585596,2,"102","color trick 3",9,0,1,1833.55555555556,"","user2","SCILOY-R366PL",1,1,"Intervention",16
+"135",22585596,2,"102","hand swype",23,16,0.58974358974359,1517.64102564103,"","user2","SCILOY-R366PL",1,1,"Intervention",16
+"136",22585596,2,"102","quick tap level 2",15,0,1,481.777777777778,"","user2","SCILOY-R366PL",1,1,"Intervention",16
+"137",22585596,3,"102","color trick 1",9,0,1,1001.66666666667,"","user2","SCILOY-R366PL",1,1,"Intervention",7
+"138",22585596,3,"102","color trick 2",9,0,1,883,"","user2","SCILOY-R366PL",1,1,"Intervention",7
+"139",22585596,3,"102","color trick 3",8,1,0.888888888888889,1345.55555555556,"","user2","SCILOY-R366PL",1,1,"Intervention",7
+"140",22585596,3,"102","hand swype",21,15,0.583333333333333,1469.45714285714,"","user2","SCILOY-R366PL",1,1,"Intervention",7
+"141",22585596,3,"102","quick tap level 2",15,0,1,493.166666666667,"","user2","SCILOY-R366PL",1,1,"Intervention",7
+"142",22585597,1,"111","color trick 1",9,0,1,821.222222222222,"","user11","SCILOY-LYZJ0B",1,1,"Intervention",13
+"143",22585597,1,"111","color trick 2",8,1,0.888888888888889,1089.44444444444,"","user11","SCILOY-LYZJ0B",1,1,"Intervention",13
+"144",22585597,1,"111","color trick 3",8,1,0.888888888888889,1568,"","user11","SCILOY-LYZJ0B",1,1,"Intervention",13
+"145",22585597,1,"111","hand swype",23,12,0.657142857142857,1621.91428571429,"","user11","SCILOY-LYZJ0B",1,1,"Intervention",13
+"146",22585597,1,"111","quick tap level 2",14,1,0.933333333333333,473.2,"","user11","SCILOY-LYZJ0B",1,1,"Intervention",13
+"147",22585597,2,"111","color trick 1",8,1,0.888888888888889,799.444444444444,"","user11","SCILOY-LYZJ0B",1,1,"Intervention",12
+"148",22585597,2,"111","color trick 2",8,1,0.888888888888889,746,"","user11","SCILOY-LYZJ0B",1,1,"Intervention",12
+"149",22585597,2,"111","color trick 3",9,0,1,1285.88888888889,"","user11","SCILOY-LYZJ0B",1,1,"Intervention",12
+"150",22585597,2,"111","hand swype",28,1,0.96551724137931,2042.31034482759,"","user11","SCILOY-LYZJ0B",1,1,"Intervention",12
+"151",22585597,2,"111","quick tap level 2",14,1,0.933333333333333,452.818181818182,"","user11","SCILOY-LYZJ0B",1,1,"Intervention",12
+"152",22585597,3,"111","color trick 1",9,0,1,1066,"","user11","SCILOY-LYZJ0B",1,1,"Intervention",12
+"153",22585597,3,"111","color trick 2",9,0,1,717.333333333333,"","user11","SCILOY-LYZJ0B",1,1,"Intervention",12
+"154",22585597,3,"111","color trick 3",8,1,0.888888888888889,1139.22222222222,"","user11","SCILOY-LYZJ0B",1,1,"Intervention",12
+"155",22585597,3,"111","hand swype",31,1,0.96875,1846.5625,"","user11","SCILOY-LYZJ0B",1,1,"Intervention",12
+"156",22585597,3,"111","quick tap level 2",15,0,1,551.333333333333,"","user11","SCILOY-LYZJ0B",1,1,"Intervention",12
+"157",22585599,1,"104","color trick 1",9,0,1,1303.66666666667,"","user4","SCILOY-PKIHEW",1,1,"Intervention",9
+"158",22585599,1,"104","color trick 2",8,1,0.888888888888889,1716.44444444444,"","user4","SCILOY-PKIHEW",1,1,"Intervention",9
+"159",22585599,1,"104","color trick 3",8,1,0.888888888888889,1547.66666666667,"","user4","SCILOY-PKIHEW",1,1,"Intervention",9
+"160",22585599,1,"104","hand swype",27,13,0.675,1465.525,"","user4","SCILOY-PKIHEW",1,1,"Intervention",9
+"161",22585599,1,"104","quick tap level 2",15,0,1,503.5,"","user4","SCILOY-PKIHEW",1,1,"Intervention",9
+"162",22585599,2,"104","color trick 1",7,2,0.777777777777778,1190.77777777778,"","user4","SCILOY-PKIHEW",1,1,"Intervention",6
+"163",22585599,2,"104","color trick 2",9,0,1,832.888888888889,"","user4","SCILOY-PKIHEW",1,1,"Intervention",6
+"164",22585599,2,"104","color trick 3",9,0,1,1418.875,"","user4","SCILOY-PKIHEW",1,1,"Intervention",6
+"165",22585599,2,"104","hand swype",23,4,0.851851851851852,2166.62962962963,"","user4","SCILOY-PKIHEW",1,1,"Intervention",6
+"166",22585599,2,"104","quick tap level 2",14,1,0.933333333333333,519.3,"","user4","SCILOY-PKIHEW",1,1,"Intervention",6
+"167",22585599,3,"104","color trick 1",9,0,1,1227.88888888889,"","user4","SCILOY-PKIHEW",1,1,"Intervention",4
+"168",22585599,3,"104","color trick 2",6,3,0.666666666666667,1256.66666666667,"","user4","SCILOY-PKIHEW",1,1,"Intervention",4
+"169",22585599,3,"104","color trick 3",8,1,0.888888888888889,1897,"","user4","SCILOY-PKIHEW",1,1,"Intervention",4
+"170",22585599,3,"104","hand swype",31,4,0.885714285714286,1668.34285714286,"","user4","SCILOY-PKIHEW",1,1,"Intervention",4
+"171",22585599,3,"104","quick tap level 2",14,1,0.933333333333333,576.666666666667,"","user4","SCILOY-PKIHEW",1,1,"Intervention",4
+"172",22585600,1,"106","color trick 1",9,0,1,929,"","user6","SCILOY-PF78CK",1,1,"Intervention",13
+"173",22585600,1,"106","color trick 2",9,0,1,746.444444444444,"","user6","SCILOY-PF78CK",1,1,"Intervention",13
+"174",22585600,1,"106","color trick 3",8,1,0.888888888888889,989.666666666667,"","user6","SCILOY-PF78CK",1,1,"Intervention",13
+"175",22585600,1,"106","hand swype",25,8,0.757575757575758,1759.36363636364,"","user6","SCILOY-PF78CK",1,1,"Intervention",13
+"176",22585600,1,"106","quick tap level 2",15,0,1,485.857142857143,"","user6","SCILOY-PF78CK",1,1,"Intervention",13
+"177",22585600,2,"106","color trick 1",9,0,1,729.555555555556,"","user6","SCILOY-PF78CK",1,1,"Intervention",14
+"178",22585600,2,"106","color trick 2",8,1,0.888888888888889,609.222222222222,"","user6","SCILOY-PF78CK",1,1,"Intervention",14
+"179",22585600,2,"106","color trick 3",7,2,0.777777777777778,911.444444444444,"","user6","SCILOY-PF78CK",1,1,"Intervention",14
+"180",22585600,2,"106","hand swype",33,8,0.804878048780488,1423.48780487805,"","user6","SCILOY-PF78CK",1,1,"Intervention",14
+"181",22585600,2,"106","quick tap level 2",15,0,1,547.75,"","user6","SCILOY-PF78CK",1,1,"Intervention",14
+"182",22585600,3,"106","color trick 1",9,0,1,623.444444444444,"","user6","SCILOY-PF78CK",1,1,"Intervention",12
+"183",22585600,3,"106","color trick 2",9,0,1,547,"","user6","SCILOY-PF78CK",1,1,"Intervention",12
+"184",22585600,3,"106","color trick 3",8,1,0.888888888888889,913.444444444444,"","user6","SCILOY-PF78CK",1,1,"Intervention",12
+"185",22585600,3,"106","hand swype",34,5,0.871794871794872,1508.82051282051,"","user6","SCILOY-PF78CK",1,1,"Intervention",12
+"186",22585600,3,"106","quick tap level 2",15,0,1,473.222222222222,"","user6","SCILOY-PF78CK",1,1,"Intervention",12
+"187",22585601,1,"118","color trick 1",9,0,1,1055.33333333333,"","user18","SCILOY-CFHZ9O",1,1,"Intervention",8
+"188",22585601,1,"118","color trick 2",9,0,1,1120,"","user18","SCILOY-CFHZ9O",1,1,"Intervention",8
+"189",22585601,1,"118","color trick 3",6,3,0.666666666666667,1821.11111111111,"","user18","SCILOY-CFHZ9O",1,1,"Intervention",8
+"190",22585601,1,"118","hand swype",15,9,0.625,1704.33333333333,"","user18","SCILOY-CFHZ9O",1,1,"Intervention",8
+"191",22585601,1,"118","quick tap level 2",15,0,1,509,"","user18","SCILOY-CFHZ9O",1,1,"Intervention",8
+"192",22585601,2,"118","color trick 1",9,0,1,857.666666666667,"","user18","SCILOY-CFHZ9O",1,1,"Intervention",3
+"193",22585601,2,"118","color trick 2",8,1,0.888888888888889,780.555555555556,"","user18","SCILOY-CFHZ9O",1,1,"Intervention",3
+"194",22585601,2,"118","color trick 3",8,1,0.888888888888889,1475.88888888889,"","user18","SCILOY-CFHZ9O",1,1,"Intervention",3
+"195",22585601,2,"118","hand swype",30,22,0.576923076923077,1120.5,"","user18","SCILOY-CFHZ9O",1,1,"Intervention",3
+"196",22585601,2,"118","quick tap level 2",14,1,0.933333333333333,553.75,"","user18","SCILOY-CFHZ9O",1,1,"Intervention",3
+"197",22585604,1,"113","color trick 1",9,0,1,781.555555555556,"","user13","SCILOY-3O8IAW",1,1,"Intervention",10
+"198",22585604,1,"113","color trick 2",9,0,1,599.666666666667,"","user13","SCILOY-3O8IAW",1,1,"Intervention",10
+"199",22585604,1,"113","color trick 3",7,2,0.777777777777778,1164.88888888889,"","user13","SCILOY-3O8IAW",1,1,"Intervention",10
+"200",22585604,1,"113","hand swype",16,10,0.615384615384615,1804.44,"","user13","SCILOY-3O8IAW",1,1,"Intervention",10
+"201",22585604,1,"113","quick tap level 2",15,0,1,612.666666666667,"","user13","SCILOY-3O8IAW",1,1,"Intervention",10
+"202",22585604,2,"113","color trick 1",9,0,1,957.666666666667,"","user13","SCILOY-3O8IAW",1,1,"Intervention",8
+"203",22585604,2,"113","color trick 2",6,3,0.666666666666667,1158.22222222222,"","user13","SCILOY-3O8IAW",1,1,"Intervention",8
+"204",22585604,2,"113","color trick 3",9,0,1,1590.55555555556,"","user13","SCILOY-3O8IAW",1,1,"Intervention",8
+"205",22585604,2,"113","hand swype",17,18,0.485714285714286,1688.02857142857,"","user13","SCILOY-3O8IAW",1,1,"Intervention",8
+"206",22585604,2,"113","quick tap level 2",15,0,1,548.571428571429,"","user13","SCILOY-3O8IAW",1,1,"Intervention",8
+"207",22585604,3,"113","color trick 1",9,0,1,905.444444444444,"","user13","SCILOY-3O8IAW",1,1,"Intervention",7
+"208",22585604,3,"113","color trick 2",8,1,0.888888888888889,1184.22222222222,"","user13","SCILOY-3O8IAW",1,1,"Intervention",7
+"209",22585604,3,"113","color trick 3",9,0,1,1023.25,"","user13","SCILOY-3O8IAW",1,1,"Intervention",7
+"210",22585604,3,"113","hand swype",25,26,0.490196078431373,1150.01960784314,"","user13","SCILOY-3O8IAW",1,1,"Intervention",7
+"211",22585604,3,"113","quick tap level 2",14,1,0.933333333333333,471.333333333333,"","user13","SCILOY-3O8IAW",1,1,"Intervention",7
+"212",22585606,1,"103","color trick 1",9,0,1,1178.11111111111,"","user 3","SCILOY-XA3RBI",0,1,"Control",16
+"213",22585606,1,"103","color trick 2",7,2,0.777777777777778,1923,"","user 3","SCILOY-XA3RBI",0,1,"Control",16
+"214",22585606,1,"103","color trick 3",8,1,0.888888888888889,2400.55555555556,"","user 3","SCILOY-XA3RBI",0,1,"Control",16
+"215",22585606,1,"103","hand swype",12,16,0.428571428571429,1574.65384615385,"","user 3","SCILOY-XA3RBI",0,1,"Control",16
+"216",22585606,1,"103","quick tap level 2",15,0,1,570.5,"","user 3","SCILOY-XA3RBI",0,1,"Control",16
+"217",22585606,2,"103","color trick 1",9,0,1,1070.55555555556,"","user 3","SCILOY-XA3RBI",0,1,"Control",15
+"218",22585606,2,"103","color trick 2",9,0,1,1310.55555555556,"","user 3","SCILOY-XA3RBI",0,1,"Control",15
+"219",22585606,2,"103","color trick 3",9,0,1,1444.66666666667,"","user 3","SCILOY-XA3RBI",0,1,"Control",15
+"220",22585606,2,"103","hand swype",14,9,0.608695652173913,2267.04545454545,"","user 3","SCILOY-XA3RBI",0,1,"Control",15
+"221",22585606,2,"103","quick tap level 2",15,0,1,460,"","user 3","SCILOY-XA3RBI",0,1,"Control",15
+"222",22585606,3,"103","color trick 1",9,0,1,1039.77777777778,"","user 3","SCILOY-XA3RBI",0,1,"Control",16
+"223",22585606,3,"103","color trick 2",9,0,1,963.777777777778,"","user 3","SCILOY-XA3RBI",0,1,"Control",16
+"224",22585606,3,"103","color trick 3",9,0,1,1484.77777777778,"","user 3","SCILOY-XA3RBI",0,1,"Control",16
+"225",22585606,3,"103","hand swype",21,2,0.91304347826087,2529.95652173913,"","user 3","SCILOY-XA3RBI",0,1,"Control",16
+"226",22585606,3,"103","quick tap level 2",14,1,0.933333333333333,512.8,"","user 3","SCILOY-XA3RBI",0,1,"Control",16
+"227",22585609,1,"116","color trick 1",9,0,1,1058.44444444444,"","user16","SCILOY-2OMKTK",0,1,"Control",11
+"228",22585609,1,"116","color trick 2",8,1,0.888888888888889,1934.11111111111,"","user16","SCILOY-2OMKTK",0,1,"Control",11
+"229",22585609,1,"116","color trick 3",9,0,1,1724.11111111111,"","user16","SCILOY-2OMKTK",0,1,"Control",11
+"230",22585609,1,"116","hand swype",16,15,0.516129032258065,1857.45161290323,"","user16","SCILOY-2OMKTK",0,1,"Control",11
+"231",22585609,1,"116","quick tap level 2",15,0,1,525.4,"","user16","SCILOY-2OMKTK",0,1,"Control",11
+"232",22585609,2,"116","color trick 1",9,0,1,979.888888888889,"","user16","SCILOY-2OMKTK",0,1,"Control",14
+"233",22585609,2,"116","color trick 2",5,4,0.555555555555556,1589.28571428571,"","user16","SCILOY-2OMKTK",0,1,"Control",14
+"234",22585609,2,"116","color trick 3",9,0,1,1789,"","user16","SCILOY-2OMKTK",0,1,"Control",14
+"235",22585609,2,"116","hand swype",16,2,0.888888888888889,2704.41176470588,"","user16","SCILOY-2OMKTK",0,1,"Control",14
+"236",22585609,2,"116","quick tap level 2",14,1,0.933333333333333,543.5,"","user16","SCILOY-2OMKTK",0,1,"Control",14
+"237",22585609,3,"116","color trick 1",9,0,1,1258.77777777778,"","user16","SCILOY-2OMKTK",0,1,"Control",10
+"238",22585609,3,"116","color trick 2",9,0,1,912.555555555556,"","user16","SCILOY-2OMKTK",0,1,"Control",10
+"239",22585609,3,"116","color trick 3",9,0,1,1412.77777777778,"","user16","SCILOY-2OMKTK",0,1,"Control",10
+"240",22585609,3,"116","hand swype",20,4,0.833333333333333,2238.73913043478,"","user16","SCILOY-2OMKTK",0,1,"Control",10
+"241",22585609,3,"116","quick tap level 2",15,0,1,551.5,"","user16","SCILOY-2OMKTK",0,1,"Control",10
+"242",22585610,1,"117","color trick 1",9,0,1,943.5,"","user17","SCILOY-GQB8JT",0,1,"Control",8
+"243",22585610,1,"117","color trick 2",8,1,0.888888888888889,1615.22222222222,"","user17","SCILOY-GQB8JT",0,1,"Control",8
+"244",22585610,1,"117","color trick 3",6,3,0.666666666666667,2393.625,"","user17","SCILOY-GQB8JT",0,1,"Control",8
+"245",22585610,1,"117","hand swype",24,16,0.6,1332.84615384615,"","user17","SCILOY-GQB8JT",0,1,"Control",8
+"246",22585610,1,"117","quick tap level 2",15,0,1,478.625,"","user17","SCILOY-GQB8JT",0,1,"Control",8
+"247",22585612,1,"203","color trick 1",9,0,1,1065,"","user3","SCILOY-LY3NC4",1,2,"Intervention",14
+"248",22585612,1,"203","color trick 2",8,1,0.888888888888889,1487.55555555556,"","user3","SCILOY-LY3NC4",1,2,"Intervention",14
+"249",22585612,1,"203","color trick 3",9,0,1,1412.22222222222,"","user3","SCILOY-LY3NC4",1,2,"Intervention",14
+"250",22585612,1,"203","hand swype",27,2,0.931034482758621,1992.31034482759,"","user3","SCILOY-LY3NC4",1,2,"Intervention",14
+"251",22585612,1,"203","quick tap level 2",13,2,0.866666666666667,649.8,"","user3","SCILOY-LY3NC4",1,2,"Intervention",14
+"252",22585612,2,"203","color trick 1",9,0,1,912.666666666667,"","user3","SCILOY-LY3NC4",1,2,"Intervention",10
+"253",22585612,2,"203","color trick 2",9,0,1,1097.55555555556,"","user3","SCILOY-LY3NC4",1,2,"Intervention",10
+"254",22585612,2,"203","color trick 3",9,0,1,1098,"","user3","SCILOY-LY3NC4",1,2,"Intervention",10
+"255",22585612,2,"203","hand swype",27,4,0.870967741935484,1870.35483870968,"","user3","SCILOY-LY3NC4",1,2,"Intervention",10
+"256",22585612,2,"203","quick tap level 2",15,0,1,523.5,"","user3","SCILOY-LY3NC4",1,2,"Intervention",10
+"257",22585612,3,"203","color trick 1",9,0,1,935.111111111111,"","user3","SCILOY-LY3NC4",1,2,"Intervention",7
+"258",22585612,3,"203","color trick 2",9,0,1,1168.33333333333,"","user3","SCILOY-LY3NC4",1,2,"Intervention",7
+"259",22585612,3,"203","color trick 3",9,0,1,1290,"","user3","SCILOY-LY3NC4",1,2,"Intervention",7
+"260",22585612,3,"203","hand swype",36,1,0.972972972972973,1569.35135135135,"","user3","SCILOY-LY3NC4",1,2,"Intervention",7
+"261",22585612,3,"203","quick tap level 2",15,0,1,525.75,"","user3","SCILOY-LY3NC4",1,2,"Intervention",7
+"262",22585613,1,"214","color trick 1",9,0,1,874.444444444444,"","user14","SCILOY-C2APOH",1,2,"Intervention",14
+"263",22585613,1,"214","color trick 2",8,1,0.888888888888889,989.777777777778,"","user14","SCILOY-C2APOH",1,2,"Intervention",14
+"264",22585613,1,"214","color trick 3",9,0,1,1322.77777777778,"","user14","SCILOY-C2APOH",1,2,"Intervention",14
+"265",22585613,1,"214","hand swype",24,17,0.585365853658537,1448.65853658537,"","user14","SCILOY-C2APOH",1,2,"Intervention",14
+"266",22585613,1,"214","quick tap level 2",14,1,0.933333333333333,502,"","user14","SCILOY-C2APOH",1,2,"Intervention",14
+"267",22585613,2,"214","color trick 1",8,1,0.888888888888889,988.777777777778,"","user14","SCILOY-C2APOH",1,2,"Intervention",8
+"268",22585613,2,"214","color trick 2",9,0,1,1023.11111111111,"","user14","SCILOY-C2APOH",1,2,"Intervention",8
+"269",22585613,2,"214","color trick 3",9,0,1,1213.55555555556,"","user14","SCILOY-C2APOH",1,2,"Intervention",8
+"270",22585613,2,"214","hand swype",20,14,0.588235294117647,1720.61764705882,"","user14","SCILOY-C2APOH",1,2,"Intervention",8
+"271",22585613,2,"214","quick tap level 2",12,3,0.8,407.363636363636,"","user14","SCILOY-C2APOH",1,2,"Intervention",8
+"272",22585613,3,"214","color trick 1",9,0,1,1103.77777777778,"","user14","SCILOY-C2APOH",1,2,"Intervention",13
+"273",22585613,3,"214","color trick 2",8,1,0.888888888888889,884.666666666667,"","user14","SCILOY-C2APOH",1,2,"Intervention",13
+"274",22585613,3,"214","color trick 3",8,1,0.888888888888889,1191.55555555556,"","user14","SCILOY-C2APOH",1,2,"Intervention",13
+"275",22585613,3,"214","hand swype",18,14,0.5625,1805.875,"","user14","SCILOY-C2APOH",1,2,"Intervention",13
+"276",22585613,3,"214","quick tap level 2",13,2,0.866666666666667,432.818181818182,"","user14","SCILOY-C2APOH",1,2,"Intervention",13
+"277",22585614,1,"209","color trick 1",9,0,1,1838.11111111111,"","user9","SCILOY-8CVNJR",1,2,"Intervention",3
+"278",22585614,1,"209","color trick 2",7,2,0.777777777777778,2691.375,"","user9","SCILOY-8CVNJR",1,2,"Intervention",3
+"279",22585614,1,"209","color trick 3",7,2,0.777777777777778,2903.5,"","user9","SCILOY-8CVNJR",1,2,"Intervention",3
+"280",22585614,1,"209","hand swype",23,22,0.511111111111111,1280.73333333333,"","user9","SCILOY-8CVNJR",1,2,"Intervention",3
+"281",22585614,1,"209","quick tap level 2",15,0,1,533.142857142857,"","user9","SCILOY-8CVNJR",1,2,"Intervention",3
+"282",22585614,2,"209","color trick 1",9,0,1,890.777777777778,"","user9","SCILOY-8CVNJR",1,2,"Intervention",2
+"283",22585614,2,"209","color trick 2",7,2,0.777777777777778,1883.88888888889,"","user9","SCILOY-8CVNJR",1,2,"Intervention",2
+"284",22585614,2,"209","color trick 3",7,2,0.777777777777778,2182.11111111111,"","user9","SCILOY-8CVNJR",1,2,"Intervention",2
+"285",22585614,2,"209","hand swype",31,16,0.659574468085106,1256.55319148936,"","user9","SCILOY-8CVNJR",1,2,"Intervention",2
+"286",22585614,2,"209","quick tap level 2",15,0,1,360.666666666667,"","user9","SCILOY-8CVNJR",1,2,"Intervention",2
+"287",22585614,3,"209","color trick 1",9,0,1,1260.22222222222,"","user9","SCILOY-8CVNJR",1,2,"Intervention",7
+"288",22585614,3,"209","color trick 2",8,1,0.888888888888889,1781.77777777778,"","user9","SCILOY-8CVNJR",1,2,"Intervention",7
+"289",22585614,3,"209","color trick 3",9,0,1,1444.77777777778,"","user9","SCILOY-8CVNJR",1,2,"Intervention",7
+"290",22585614,3,"209","hand swype",20,11,0.645161290322581,1700.23333333333,"","user9","SCILOY-8CVNJR",1,2,"Intervention",7
+"291",22585614,3,"209","quick tap level 2",15,0,1,420.428571428571,"","user9","SCILOY-8CVNJR",1,2,"Intervention",7
+"292",22585616,1,"206","color trick 1",9,0,1,1003.55555555556,"","user6","SCILOY-AVW0KG",1,2,"Intervention",14
+"293",22585616,1,"206","color trick 2",9,0,1,978.333333333333,"","user6","SCILOY-AVW0KG",1,2,"Intervention",14
+"294",22585616,1,"206","color trick 3",8,1,0.888888888888889,2025.66666666667,"","user6","SCILOY-AVW0KG",1,2,"Intervention",14
+"295",22585616,1,"206","hand swype",17,6,0.739130434782609,2366.5,"","user6","SCILOY-AVW0KG",1,2,"Intervention",14
+"296",22585616,1,"206","quick tap level 2",15,0,1,521.166666666667,"","user6","SCILOY-AVW0KG",1,2,"Intervention",14
+"297",22585616,2,"206","color trick 1",9,0,1,806.555555555556,"","user6","SCILOY-AVW0KG",1,2,"Intervention",5
+"298",22585616,2,"206","color trick 2",8,1,0.888888888888889,1375.55555555556,"","user6","SCILOY-AVW0KG",1,2,"Intervention",5
+"299",22585616,2,"206","color trick 3",8,1,0.888888888888889,1170.44444444444,"","user6","SCILOY-AVW0KG",1,2,"Intervention",5
+"300",22585616,2,"206","hand swype",21,6,0.777777777777778,2050.38461538462,"","user6","SCILOY-AVW0KG",1,2,"Intervention",5
+"301",22585616,2,"206","quick tap level 2",15,0,1,570.2,"","user6","SCILOY-AVW0KG",1,2,"Intervention",5
+"302",22585616,3,"206","color trick 1",9,0,1,879.888888888889,"","user6","SCILOY-AVW0KG",1,2,"Intervention",2
+"303",22585616,3,"206","color trick 2",9,0,1,1073.77777777778,"","user6","SCILOY-AVW0KG",1,2,"Intervention",2
+"304",22585616,3,"206","color trick 3",9,0,1,1302.11111111111,"","user6","SCILOY-AVW0KG",1,2,"Intervention",2
+"305",22585616,3,"206","hand swype",25,1,0.961538461538462,2264.38461538462,"","user6","SCILOY-AVW0KG",1,2,"Intervention",2
+"306",22585616,3,"206","quick tap level 2",15,0,1,502.428571428571,"","user6","SCILOY-AVW0KG",1,2,"Intervention",2
+"307",22585619,1,"207","color trick 1",9,0,1,740.777777777778,"","user7","SCILOY-994GC6",1,2,"Intervention",24
+"308",22585619,1,"207","color trick 2",9,0,1,1200.11111111111,"","user7","SCILOY-994GC6",1,2,"Intervention",24
+"309",22585619,1,"207","color trick 3",8,1,0.888888888888889,1739.66666666667,"","user7","SCILOY-994GC6",1,2,"Intervention",24
+"310",22585619,1,"207","hand swype",10,22,0.3125,1708.74193548387,"","user7","SCILOY-994GC6",1,2,"Intervention",24
+"311",22585619,1,"207","quick tap level 2",13,2,0.866666666666667,758.714285714286,"","user7","SCILOY-994GC6",1,2,"Intervention",24
+"312",22585619,2,"207","color trick 1",9,0,1,1003.33333333333,"","user7","SCILOY-994GC6",1,2,"Intervention",24
+"313",22585619,2,"207","color trick 2",9,0,1,1112.88888888889,"","user7","SCILOY-994GC6",1,2,"Intervention",24
+"314",22585619,2,"207","color trick 3",9,0,1,1697,"","user7","SCILOY-994GC6",1,2,"Intervention",24
+"315",22585619,2,"207","hand swype",12,14,0.461538461538462,1818.58333333333,"","user7","SCILOY-994GC6",1,2,"Intervention",24
+"316",22585619,2,"207","quick tap level 2",15,0,1,632.875,"","user7","SCILOY-994GC6",1,2,"Intervention",24
+"317",22585619,3,"207","color trick 1",9,0,1,792.666666666667,"","user7","SCILOY-994GC6",1,2,"Intervention",22
+"318",22585619,3,"207","color trick 2",9,0,1,1385.11111111111,"","user7","SCILOY-994GC6",1,2,"Intervention",22
+"319",22585619,3,"207","color trick 3",9,0,1,1486.88888888889,"","user7","SCILOY-994GC6",1,2,"Intervention",22
+"320",22585619,3,"207","hand swype",9,17,0.346153846153846,1993.95833333333,"","user7","SCILOY-994GC6",1,2,"Intervention",22
+"321",22585619,3,"207","quick tap level 2",13,2,0.866666666666667,603,"","user7","SCILOY-994GC6",1,2,"Intervention",22
+"322",22585620,1,"204","color trick 1",6,3,0.666666666666667,1021.875,"","user4","SCILOY-40QC3J",1,2,"Intervention",14
+"323",22585620,1,"204","color trick 2",5,4,0.555555555555556,1915.57142857143,"","user4","SCILOY-40QC3J",1,2,"Intervention",14
+"324",22585620,1,"204","color trick 3",8,1,0.888888888888889,2176.375,"","user4","SCILOY-40QC3J",1,2,"Intervention",14
+"325",22585620,1,"204","hand swype",24,16,0.6,1478,"","user4","SCILOY-40QC3J",1,2,"Intervention",14
+"326",22585620,1,"204","quick tap level 2",15,0,1,465,"","user4","SCILOY-40QC3J",1,2,"Intervention",14
+"327",22585620,2,"204","color trick 1",9,0,1,991.333333333333,"","user4","SCILOY-40QC3J",1,2,"Intervention",13
+"328",22585620,2,"204","color trick 2",9,0,1,733,"","user4","SCILOY-40QC3J",1,2,"Intervention",13
+"329",22585620,2,"204","color trick 3",9,0,1,1163.33333333333,"","user4","SCILOY-40QC3J",1,2,"Intervention",13
+"330",22585620,2,"204","hand swype",21,15,0.583333333333333,1648.69444444444,"","user4","SCILOY-40QC3J",1,2,"Intervention",13
+"331",22585620,2,"204","quick tap level 2",14,1,0.933333333333333,481,"","user4","SCILOY-40QC3J",1,2,"Intervention",13
+"332",22585621,1,"202","color trick 1",9,0,1,797,"","user2","SCILOY-B8AW62",1,2,"Intervention",22
+"333",22585621,1,"202","color trick 2",6,3,0.666666666666667,1579.55555555556,"","user2","SCILOY-B8AW62",1,2,"Intervention",22
+"334",22585621,1,"202","color trick 3",8,1,0.888888888888889,1418.77777777778,"","user2","SCILOY-B8AW62",1,2,"Intervention",22
+"335",22585621,1,"202","hand swype",31,6,0.837837837837838,1574.18918918919,"","user2","SCILOY-B8AW62",1,2,"Intervention",22
+"336",22585621,1,"202","quick tap level 2",13,2,0.866666666666667,450.75,"","user2","SCILOY-B8AW62",1,2,"Intervention",22
+"337",22585621,2,"202","color trick 1",9,0,1,836.666666666667,"","user2","SCILOY-B8AW62",1,2,"Intervention",26
+"338",22585621,2,"202","color trick 2",9,0,1,773.777777777778,"","user2","SCILOY-B8AW62",1,2,"Intervention",26
+"339",22585621,2,"202","color trick 3",9,0,1,1020.44444444444,"","user2","SCILOY-B8AW62",1,2,"Intervention",26
+"340",22585621,2,"202","hand swype",29,11,0.725,1441.3,"","user2","SCILOY-B8AW62",1,2,"Intervention",26
+"341",22585621,2,"202","quick tap level 2",13,2,0.866666666666667,429.25,"","user2","SCILOY-B8AW62",1,2,"Intervention",26
+"342",22585621,3,"202","color trick 1",9,0,1,1096.22222222222,"","user2","SCILOY-B8AW62",1,2,"Intervention",11
+"343",22585621,3,"202","color trick 2",9,0,1,584.444444444444,"","user2","SCILOY-B8AW62",1,2,"Intervention",11
+"344",22585621,3,"202","color trick 3",9,0,1,809,"","user2","SCILOY-B8AW62",1,2,"Intervention",11
+"345",22585621,3,"202","hand swype",29,5,0.852941176470588,1701.88235294118,"","user2","SCILOY-B8AW62",1,2,"Intervention",11
+"346",22585621,3,"202","quick tap level 2",14,1,0.933333333333333,435.888888888889,"","user2","SCILOY-B8AW62",1,2,"Intervention",11
+"347",22585623,1,"201","color trick 1",9,0,1,1001.22222222222,"","user1","SCILOY-VMDSI1",1,2,"Intervention",22
+"348",22585623,1,"201","color trick 2",9,0,1,866.333333333333,"","user1","SCILOY-VMDSI1",1,2,"Intervention",22
+"349",22585623,1,"201","color trick 3",9,0,1,1774.77777777778,"","user1","SCILOY-VMDSI1",1,2,"Intervention",22
+"350",22585623,1,"201","hand swype",19,27,0.41304347826087,1268.9347826087,"","user1","SCILOY-VMDSI1",1,2,"Intervention",22
+"351",22585623,1,"201","quick tap level 2",13,2,0.866666666666667,463.714285714286,"","user1","SCILOY-VMDSI1",1,2,"Intervention",22
+"352",22585623,2,"201","color trick 1",9,0,1,932.888888888889,"","user1","SCILOY-VMDSI1",1,2,"Intervention",15
+"353",22585623,2,"201","color trick 2",9,0,1,990,"","user1","SCILOY-VMDSI1",1,2,"Intervention",15
+"354",22585623,2,"201","color trick 3",8,1,0.888888888888889,1673.375,"","user1","SCILOY-VMDSI1",1,2,"Intervention",15
+"355",22585623,2,"201","hand swype",21,15,0.583333333333333,1613.38888888889,"","user1","SCILOY-VMDSI1",1,2,"Intervention",15
+"356",22585623,2,"201","quick tap level 2",14,1,0.933333333333333,547,"","user1","SCILOY-VMDSI1",1,2,"Intervention",15
+"357",22585623,3,"201","color trick 1",9,0,1,920.888888888889,"","user1","SCILOY-VMDSI1",1,2,"Intervention",14
+"358",22585623,3,"201","color trick 2",9,0,1,1031,"","user1","SCILOY-VMDSI1",1,2,"Intervention",14
+"359",22585623,3,"201","color trick 3",9,0,1,1367.22222222222,"","user1","SCILOY-VMDSI1",1,2,"Intervention",14
+"360",22585623,3,"201","hand swype",22,8,0.733333333333333,1961.96666666667,"","user1","SCILOY-VMDSI1",1,2,"Intervention",14
+"361",22585623,3,"201","quick tap level 2",13,2,0.866666666666667,559.272727272727,"","user1","SCILOY-VMDSI1",1,2,"Intervention",14
+"362",22585624,1,"212","color trick 1",8,1,0.888888888888889,780.333333333333,"","user12","SCILOY-XU2YCR",1,2,"Intervention",8
+"363",22585624,1,"212","color trick 2",9,0,1,913.222222222222,"","user12","SCILOY-XU2YCR",1,2,"Intervention",8
+"364",22585624,1,"212","color trick 3",1,8,0.111111111111111,1833.88888888889,"","user12","SCILOY-XU2YCR",1,2,"Intervention",8
+"365",22585624,1,"212","hand swype",39,37,0.513157894736842,776.381578947368,"","user12","SCILOY-XU2YCR",1,2,"Intervention",8
+"366",22585624,1,"212","quick tap level 2",15,0,1,481.6,"","user12","SCILOY-XU2YCR",1,2,"Intervention",8
+"367",22585624,2,"212","color trick 1",8,1,0.888888888888889,1111.88888888889,"","user12","SCILOY-XU2YCR",1,2,"Intervention",8
+"368",22585624,2,"212","color trick 2",6,3,0.666666666666667,1279.33333333333,"","user12","SCILOY-XU2YCR",1,2,"Intervention",8
+"369",22585624,2,"212","color trick 3",4,5,0.444444444444444,1477.55555555556,"","user12","SCILOY-XU2YCR",1,2,"Intervention",8
+"370",22585624,2,"212","hand swype",34,19,0.641509433962264,897.653846153846,"","user12","SCILOY-XU2YCR",1,2,"Intervention",8
+"371",22585624,2,"212","quick tap level 2",14,1,0.933333333333333,426.111111111111,"","user12","SCILOY-XU2YCR",1,2,"Intervention",8
+"372",22585624,3,"212","color trick 1",9,0,1,858,"","user12","SCILOY-XU2YCR",1,2,"Intervention",5
+"373",22585624,3,"212","color trick 2",8,1,0.888888888888889,767.777777777778,"","user12","SCILOY-XU2YCR",1,2,"Intervention",5
+"374",22585624,3,"212","color trick 3",9,0,1,1001.66666666667,"","user12","SCILOY-XU2YCR",1,2,"Intervention",5
+"375",22585624,3,"212","hand swype",40,17,0.701754385964912,1037.31578947368,"","user12","SCILOY-XU2YCR",1,2,"Intervention",5
+"376",22585624,3,"212","quick tap level 2",14,1,0.933333333333333,369.25,"","user12","SCILOY-XU2YCR",1,2,"Intervention",5
+"377",22585625,1,"208","color trick 1",9,0,1,1057.33333333333,"","user8","SCILOY-YZBOTU",0,2,"Control",16
+"378",22585625,1,"208","color trick 2",9,0,1,1201.77777777778,"","user8","SCILOY-YZBOTU",0,2,"Control",16
+"379",22585625,1,"208","color trick 3",9,0,1,1506.88888888889,"","user8","SCILOY-YZBOTU",0,2,"Control",16
+"380",22585625,1,"208","hand swype",18,9,0.666666666666667,1980.61538461538,"","user8","SCILOY-YZBOTU",0,2,"Control",16
+"381",22585625,1,"208","quick tap level 2",14,1,0.933333333333333,552.25,"","user8","SCILOY-YZBOTU",0,2,"Control",16
+"382",22585625,2,"208","color trick 1",9,0,1,1061.33333333333,"","user8","SCILOY-YZBOTU",0,2,"Control",15
+"383",22585625,2,"208","color trick 2",9,0,1,855.333333333333,"","user8","SCILOY-YZBOTU",0,2,"Control",15
+"384",22585625,2,"208","color trick 3",8,1,0.888888888888889,1334.55555555556,"","user8","SCILOY-YZBOTU",0,2,"Control",15
+"385",22585625,2,"208","hand swype",23,5,0.821428571428571,1953.51851851852,"","user8","SCILOY-YZBOTU",0,2,"Control",15
+"386",22585625,2,"208","quick tap level 2",14,1,0.933333333333333,497.571428571429,"","user8","SCILOY-YZBOTU",0,2,"Control",15
+"387",22585625,3,"208","color trick 1",9,0,1,891.222222222222,"","user8","SCILOY-YZBOTU",0,2,"Control",18
+"388",22585625,3,"208","color trick 2",9,0,1,609.444444444444,"","user8","SCILOY-YZBOTU",0,2,"Control",18
+"389",22585625,3,"208","color trick 3",9,0,1,1206.55555555556,"","user8","SCILOY-YZBOTU",0,2,"Control",18
+"390",22585625,3,"208","hand swype",30,1,0.967741935483871,1910.61290322581,"","user8","SCILOY-YZBOTU",0,2,"Control",18
+"391",22585625,3,"208","quick tap level 2",14,1,0.933333333333333,443.5,"","user8","SCILOY-YZBOTU",0,2,"Control",18
+"392",22585626,1,"205","color trick 1",9,0,1,861.555555555556,"","user5","SCILOY-2SSOP9",0,2,"Control",7
+"393",22585626,1,"205","color trick 2",8,1,0.888888888888889,1368.33333333333,"","user5","SCILOY-2SSOP9",0,2,"Control",7
+"394",22585626,1,"205","color trick 3",6,3,0.666666666666667,1642.66666666667,"","user5","SCILOY-2SSOP9",0,2,"Control",7
+"395",22585626,1,"205","hand swype",12,14,0.461538461538462,2363,"","user5","SCILOY-2SSOP9",0,2,"Control",7
+"396",22585626,1,"205","quick tap level 2",15,0,1,663.714285714286,"","user5","SCILOY-2SSOP9",0,2,"Control",7
+"397",22585626,2,"205","color trick 1",9,0,1,838.111111111111,"","user5","SCILOY-2SSOP9",0,2,"Control",10
+"398",22585626,2,"205","color trick 2",9,0,1,792.666666666667,"","user5","SCILOY-2SSOP9",0,2,"Control",10
+"399",22585626,2,"205","color trick 3",8,1,0.888888888888889,1857.375,"","user5","SCILOY-2SSOP9",0,2,"Control",10
+"400",22585626,2,"205","hand swype",25,13,0.657894736842105,1535.97368421053,"","user5","SCILOY-2SSOP9",0,2,"Control",10
+"401",22585626,2,"205","quick tap level 2",15,0,1,628.714285714286,"","user5","SCILOY-2SSOP9",0,2,"Control",10
+"402",22585626,3,"205","color trick 1",9,0,1,1084.33333333333,"","user5","SCILOY-2SSOP9",0,2,"Control",14
+"403",22585626,3,"205","color trick 2",8,1,0.888888888888889,809.222222222222,"","user5","SCILOY-2SSOP9",0,2,"Control",14
+"404",22585626,3,"205","color trick 3",8,1,0.888888888888889,1712.875,"","user5","SCILOY-2SSOP9",0,2,"Control",14
+"405",22585626,3,"205","hand swype",26,6,0.8125,1858.15625,"","user5","SCILOY-2SSOP9",0,2,"Control",14
+"406",22585626,3,"205","quick tap level 2",15,0,1,718.875,"","user5","SCILOY-2SSOP9",0,2,"Control",14
+"407",22585627,1,"213","color trick 1",9,0,1,1012.125,"","user13","SCILOY-Q8LLLA",0,2,"Control",13
+"408",22585627,1,"213","color trick 2",9,0,1,1128.11111111111,"","user13","SCILOY-Q8LLLA",0,2,"Control",13
+"409",22585627,1,"213","color trick 3",8,1,0.888888888888889,1743.11111111111,"","user13","SCILOY-Q8LLLA",0,2,"Control",13
+"410",22585627,1,"213","hand swype",7,9,0.4375,2042.27272727273,"","user13","SCILOY-Q8LLLA",0,2,"Control",13
+"411",22585627,1,"213","quick tap level 2",12,3,0.8,434.375,"","user13","SCILOY-Q8LLLA",0,2,"Control",13
+"412",22585629,1,"210","color trick 1",9,0,1,830.666666666667,"","user10","SCILOY-EINHNE",0,2,"Control",16
+"413",22585629,1,"210","color trick 2",8,1,0.888888888888889,1799.22222222222,"","user10","SCILOY-EINHNE",0,2,"Control",16
+"414",22585629,1,"210","color trick 3",9,0,1,1642.55555555556,"","user10","SCILOY-EINHNE",0,2,"Control",16
+"415",22585629,1,"210","hand swype",25,12,0.675675675675676,1594.67567567568,"","user10","SCILOY-EINHNE",0,2,"Control",16
+"416",22585629,1,"210","quick tap level 2",14,1,0.933333333333333,416,"","user10","SCILOY-EINHNE",0,2,"Control",16
+"417",22585629,2,"210","color trick 1",9,0,1,797.111111111111,"","user10","SCILOY-EINHNE",0,2,"Control",22
+"418",22585629,2,"210","color trick 2",9,0,1,1245,"","user10","SCILOY-EINHNE",0,2,"Control",22
+"419",22585629,2,"210","color trick 3",9,0,1,1330.77777777778,"","user10","SCILOY-EINHNE",0,2,"Control",22
+"420",22585629,2,"210","hand swype",27,18,0.6,1310.6,"","user10","SCILOY-EINHNE",0,2,"Control",22
+"421",22585629,2,"210","quick tap level 2",13,2,0.866666666666667,394.2,"","user10","SCILOY-EINHNE",0,2,"Control",22
+"422",22585629,3,"210","color trick 1",8,1,0.888888888888889,853.444444444444,"","user10","SCILOY-EINHNE",0,2,"Control",15
+"423",22585629,3,"210","color trick 2",8,1,0.888888888888889,1113.44444444444,"","user10","SCILOY-EINHNE",0,2,"Control",15
+"424",22585629,3,"210","color trick 3",8,1,0.888888888888889,1076,"","user10","SCILOY-EINHNE",0,2,"Control",15
+"425",22585629,3,"210","hand swype",28,15,0.651162790697674,1361.55813953488,"","user10","SCILOY-EINHNE",0,2,"Control",15
+"426",22585629,3,"210","quick tap level 2",13,2,0.866666666666667,425.7,"","user10","SCILOY-EINHNE",0,2,"Control",15
+"427",22585630,1,"211","color trick 1",9,0,1,826.333333333333,"","user11","SCILOY-48YPVL",0,2,"Control",10
+"428",22585630,1,"211","color trick 2",8,1,0.888888888888889,1582.11111111111,"","user11","SCILOY-48YPVL",0,2,"Control",10
+"429",22585630,1,"211","color trick 3",9,0,1,1536.55555555556,"","user11","SCILOY-48YPVL",0,2,"Control",10
+"430",22585630,1,"211","hand swype",20,21,0.48780487804878,1418.09756097561,"","user11","SCILOY-48YPVL",0,2,"Control",10
+"431",22585630,1,"211","quick tap level 2",15,0,1,497.333333333333,"","user11","SCILOY-48YPVL",0,2,"Control",10
+"432",22585630,3,"211","color trick 1",9,0,1,924.888888888889,"","user11","SCILOY-48YPVL",0,2,"Control",0
+"433",22585630,3,"211","color trick 2",7,2,0.777777777777778,1242.66666666667,"","user11","SCILOY-48YPVL",0,2,"Control",0
+"434",22585630,3,"211","color trick 3",9,0,1,1261.77777777778,"","user11","SCILOY-48YPVL",0,2,"Control",0
+"435",22585630,3,"211","hand swype",21,22,0.488372093023256,1341.90697674419,"","user11","SCILOY-48YPVL",0,2,"Control",0
+"436",22585630,3,"211","quick tap level 2",10,5,0.666666666666667,377.846153846154,"","user11","SCILOY-48YPVL",0,2,"Control",0
