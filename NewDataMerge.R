@@ -73,6 +73,12 @@ sem1 <- c(22585580,
           22585606,
           22585609,
           22585610)
+
+sem1a <- IntKey[18:36, 2]
+sem2a <- IntKey[2:15, 2]
+
+view(IntKey)
+
 sem2 <- c(22585612,
           22585613,
           22585614,
@@ -87,6 +93,8 @@ sem2 <- c(22585612,
           22585627,
           22585629,
           22585630)
+
+sem1a <- IntKey[18:36, 2]
 
 IntKey <- mutate(IntKey, semester = case_when(Study.ID %in% sem1 ~ 1,
                                                Study.ID %in% sem2 ~ 2),

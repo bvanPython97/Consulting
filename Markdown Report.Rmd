@@ -1,0 +1,690 @@
+---
+title: "STAT 488 Final Report"
+author: "Nathan Lutz, Qing Gong, & Bao Van"
+date: "12/15/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
+```
+
+```{r, echo = FALSE}
+library(tidyverse)
+```
+
+
+# Introduction
+#### <i> This project came from Dr. Rebecca Silton's lab in the Psychology Department at Loyola University. Dr. Silton's lab, unable to collect data due to COVID-19, outsourced data collection to a company called NeuroUX. The goal of these games was to measure cognitive functioning across a number of tasks. The theory behind the use of these games is that depression causes changes in cognitive functioning. The sample came was recruited based on elevated depression scores, and the goal was to assess the effect of a mindfulness intervention on depression. Previous work showed the intervention was effective in decreasing self-reported depression scores, and the current study, outlined in this document, is attempting to use scores on NeuroUX games to examine similar changes over time.</i>
+
+# Data Cleaning and merging
+#### <i> The first step was cleaning our data. The data came from three different datasets. The first contained NeuroUX data across five games and over three timepoints in two separate semesters. The second contained self-reported symptoms across a number of mental health measures. The final dataset was a key that allowed us to link the three datasets together. </i>
+
+#### The NeuroUX dataset came from six different csv files, all formatted like the one below:
+     
+```{r}
+R1<-read.csv("round1_updated.csv")
+str(R1)
+```
+
+```{r, echo = FALSE}
+R1<-read.csv("round1_updated.csv")
+R2<-read.csv("round2_updated.csv")
+R3<-read.csv("round3_updated.csv")
+R4<-read.csv("round4_updated.csv")
+R5<-read.csv("round5_updated.csv")
+R6<-read.csv("round6_updated.csv")
+```
+
+
+#### To create the NeuroUX dataset, we had to combine the six datasets, named R1, R2, ...R6.
+
+#### Based on conversations with Dr. Silton, we learned one user had played the game twice. We removed this user.
+
+```{r}
+R5<- R5%>%
+  filter(level_start_timestamp != "2021-03-25T18:55:58.767Z")
+```
+
+#### We also learned the user numbers reset across the two semesters (see the similarities between R1 and R4). We had to create new IDs based on these usernames across semesters.
+
+```{r}
+head(R1$userid)
+head(R4$userid)
+
+R1<-mutate(R1, semester=1, timepoint=1, ID = as.factor(as.numeric(gsub("user", "", userid))+100))
+R2<-mutate(R2, semester=1, timepoint=2, ID = as.factor(as.numeric(gsub("user", "", userid))+100))
+R3<-mutate(R3, semester=1, timepoint=3, ID = as.factor(as.numeric(gsub("user", "", userid))+100))
+R4<-mutate(R4, semester=2, timepoint=1, ID = as.factor(as.numeric(gsub("user", "", userid))+200))
+R5<-mutate(R5, semester=2, timepoint=2, ID = as.factor(as.numeric(gsub("user", "", userid))+200))
+R6<-mutate(R6, semester=2, timepoint=3, ID = as.factor(as.numeric(gsub("user", "", userid))+200))
+
+#Now unique across timepoints
+head(R1$ID)
+head(R4$ID)
+
+#Can combine with new unique IDs
+Full<-rbind(R1, R2, R3, R4, R5, R6)
+```
+
+#### There was also one test user who was in the dataset who we needed to remove. This gave us our final dataset for the NeuroUX data. We can see there are hundreds of rows for each participant, which comes from multiple trials within each game.
+
+```{r}
+Full <- Full%>%
+  filter(ID != 140)
+
+nrow(Full)
+
+Full%>%
+  group_by(ID)%>%
+  summarize(n())
+```
+
+
+```{r, echo = FALSE}
+#Making timepoint into a factor for later use
+Full$tp_fac <- ordered(Full$timepoint,
+                       levels = c(1, 2, 3),
+                       labels = c("Time 1", "Time 2", "Time 3")
+)
+```
+
+#### The next step was cleaning the SMILE dataset, which is where we got our information for the depression measures (PHQ-9). The data came in wide format and needed to be moved to long to correspond with each trial of the gameplay. We were only interested in time one scores for our actual study, but examining changes in depression supports previous findings.
+
+```{r}
+smile <- read.csv("SMILE full data 10 23 21_AARThesis_Deidentified_forNL.csv")
+
+smile2 <- pivot_longer(smile,
+                    cols = c(PHQ_T1_total, PHQ_T2_total, PHQ_T3_total),
+                    names_to = "Time",
+                    values_to = "PHQ.Score")
+
+smile2 <- mutate(smile2, numTime = case_when(Time == "PHQ_T1_total" ~ 1,
+                                             Time == "PHQ_T2_total" ~ 2,
+                                             Time == "PHQ_T3_total" ~ 3))
+
+smile2 <- select(smile2, StudyID_T1, numTime, PHQ.Score)
+
+#We now have only 3 variables: ID, timepoint, and PHQ
+str(smile2)
+```
+
+#### The final dataset to bring in was the key, which told us who was in the control and intervention group and which helped us merge the other two datsets. You can see this dataset is not in the most ideal format. You can also see that fall is listed second with a gap between the lists.
+
+```{r}
+IntKey <- read.csv("NeurUX.Intervention.Group.csv")
+
+head(IntKey)
+
+IntKey[15:19,]
+```
+
+#### We can fix this by pulling information from the column "Study.ID." We can create semester variables based on this, which will allow us to create the same ID variable as we did in the NeuroUX dataset. In his mutate() call, we also create a factor version of the intervention variable.
+
+```{r}
+sem1 <- IntKey[18:36, 2]
+sem2 <- IntKey[2:15, 2]
+
+IntKey <- mutate(IntKey, semester = case_when(Study.ID %in% sem1 ~ 1,
+                                               Study.ID %in% sem2 ~ 2),
+                          Int.Fac = factor(Intervention.Group,
+                                           levels = c(0, 1),
+                                           labels = c("Control", "Intervention")))
+
+#From there, we use similar code as what we did in the NeuroUX dataset
+IntKey1 <-filter(IntKey, semester == 1)
+IntKey1 <- mutate(IntKey1, ID = as.factor(as.numeric(gsub("user", "", NeurUX.ID))+100))
+
+IntKey2 <-filter(IntKey, semester == 2)
+IntKey2 <- mutate(IntKey2, ID = as.factor(as.numeric(gsub("user", "", NeurUX.ID))+200))
+
+IntKey <-rbind(IntKey1, IntKey2)
+```
+
+#### We can now start the merging process. First, we merge the keys with NeuroUX
+
+```{r}
+Merge.1 <- merge(
+                 x = Full,
+                 y = IntKey,
+                 by.x = "ID",
+                 by.y = "ID"
+)
+```
+
+#### We then merge that dataset with the PHQ data
+
+```{r}
+Merge.2 <- merge(
+                 x = Merge.1,
+                 y = smile2,
+                 by.x = c("Study.ID", "timepoint"),
+                 by.y = c("StudyID_T1", "numTime")
+)
+```
+
+#### With the new merged data, we can now finalize some data cleaning. We first want to look at what's contained in the NeuroUX data.
+
+```{r}
+levels(as.factor(Merge.2$game_name))
+```
+
+> We see there are five different games in the dataset as well as a "playlist" variable
+
+#### We don't get much from playlist except for information about completion of the full trial. This can be pulled out from the larger dataset.
+
+```{r}
+comp.data <- filter(Merge.2, game_name == "playlist")
+COMP <- c("ID", "timepoint", "session_complete", "session_start_timestamp", "session_end_timestamp")
+comp.data <- comp.data[COMP]
+comp.data <- filter(comp.data, session_complete == TRUE)
+```
+
+> #We have 87 total timepoints with completed data
+
+```{r}
+sum(comp.data$session_complete, na.rm = TRUE)
+```
+
+#### Can save the number of completed timepoints for each person
+
+```{r}
+timepoints <- comp.data%>%
+              group_by(ID)%>%
+              summarize(n())
+timepoints
+```
+
+>We aren't using this for this study, but it could be useful for cross-checking datasets or confirming with Dr. Silton.
+
+```{r, echo = FALSE}
+Merge.2 <- mutate(Merge.2, ID = factor(ID))
+```
+
+```{r}
+#Removing playlist from future analysis
+Merge.2 <- filter(Merge.2, game_name != "playlist")
+```
+
+#### Reaction times are a potential outcome for this study. We first want to make sure the reaction times make sense. We start by doing this for the Color Trick game, which involves quickly selecting identifying either the content or font color of words like "blue", "red", etc. Participants played the color trick game three times.
+
+```{r, echo = FALSE, warning = FALSE}
+CT <- c("color trick 1", "color trick 2", "color trick 3")
+Merge.2%>%
+  filter(game_name %in% CT)%>%
+  ggplot(aes(x = ID, y = (response_reaction_time/1000)))+
+  geom_violin(alpha = .1, adjust = 1.5)+
+  geom_boxplot(alpha = .5)+
+  facet_grid(game_name~.)
+
+Merge.2%>%
+  filter(game_name %in% CT)%>%
+  summarize(tot.over.5  = sum(response_reaction_time >= 5000, na.rm = TRUE),
+            prop.over.5 = sum(response_reaction_time >=5000, na.rm = TRUE)/n(),
+            tot.eq.0    = sum(response_reaction_time == 0, na.rm = TRUE),
+            prop.eq.0 = sum(response_reaction_time == 0, na.rm = TRUE)/n(),
+            total = n())
+```
+
+> A small proportion of trials take over five seconds (not likely due to thinking about or processing the question). Only 30 of the 2610 responses fall into this category. We should likely drop these for calculation and chose to moving forward.
+
+#### We then do this for Hand Swype, a game that shows a moving finger that points to the direction users should swipe their finger across the screen. Users get bonus time for correctly swiping, penalties for incorrectly swiping, and play until time runs out.
+
+```{r, echo = FALSE, warning = FALSE}
+Merge.2%>%
+  filter(game_name == "hand swype")%>%
+  ggplot(aes(x = ID, y = (response_reaction_time/1000)))+
+  geom_violin(alpha = .1, adjust = 1.5)+
+  geom_boxplot(alpha = .5)
+
+
+Merge.2%>%
+  filter(game_name == "hand swype")%>%
+  summarize(tot.over.5  = sum(response_reaction_time >= 5000, na.rm = TRUE),
+            prop.over.5 = sum(response_reaction_time >= 5000, na.rm = TRUE)/n(),
+            tot.eq.0    = sum(response_reaction_time == 0, na.rm = TRUE),
+            prop.eq.0 = sum(response_reaction_time == 0, na.rm = TRUE)/n(),
+            total = n())
+```
+
+> Similarly, it was rare to take longer than 5 seconds to respond to hand swype. 35 out of 3130 were greater than 5s. 87 were equal to 0 (this represents the total number of trials, since all ended with a timeout)
+
+#### Finally, we do this for Quick Tap 2, a game in which you wait for a symbol and either tap the screen or don't based on what appears. This game tests your ability to quickly process and inhibit a response
+
+```{r, echo = FALSE, warning = FALSE}
+Merge.2%>%
+  filter(game_name == "quick tap level 2")%>%
+  ggplot(aes(x = ID, y = (response_reaction_time/1000)))+
+  geom_violin(alpha = .1, adjust = 1.5)+
+  geom_boxplot(alpha = .5)
+
+Merge.2%>%
+  filter(game_name == "quick tap level 2")%>%
+  summarize(tot.over.5  = sum(response_reaction_time >= 1000, na.rm = TRUE),
+            prop.over.5 = sum(response_reaction_time >= 1000, na.rm = TRUE)/n(),
+            tot.eq.0    = sum(response_reaction_time == 0, na.rm = TRUE),
+            prop.eq.0 = sum(response_reaction_time == 0, na.rm = TRUE)/n(),
+            total = n(),
+            )
+```
+
+> For this game, it appears most of the responses should be under one second. Only 10 responses of 1409 were over 1 second. Many responses were 0 (comes from trials in which respondents were supposed to not tap. Not removing these skews averages). 647 were eaual to zero, which comes from the game structure. For the calculation of reaction times, we won't want to include the 0s.
+
+#### We can create a dataset with no outliers using the code below:
+
+```{r}
+CTdf <- filter(Merge.2, game_name %in% CT)
+CTdf <- CTdf[CTdf$response_reaction_time < 5000,]
+nrow(CTdf)
+
+#Recall handswype is the one that has the "checkpoint style"
+#More trials = more successful on the task
+#Our RT is less important here (although there is a correlation between RT and number correct)
+HSdf <- filter(Merge.2, game_name =="hand swype")
+HSdf <- HSdf[HSdf$response_reaction_time < 5000,]
+nrow(HSdf)
+
+#Note that for this one, we only want to count RTs of targets (distractors are 0)
+QTdf <- filter(Merge.2, game_name =="quick tap level 2")
+QTdf <- QTdf[QTdf$response_reaction_time < 1000,]
+QTdf <- QTdf[QTdf$response_reaction_time > 0,]
+nrow(QTdf)
+
+#Combining these three
+RTno.out <- rbind(CTdf, QTdf, HSdf)
+nrow(Merge.2) 
+nrow(RTno.out)
+nrow(Merge.2)-nrow(RTno.out) #Should have removed 75 missing responses and 647 0s from QT
+```
+
+#### The plot below shows the new reaction times across games. There are still some outliers, but the range is now a bit less variable.
+
+```{r, echo = FALSE}
+RTno.out%>%
+  filter(ID != "NA")%>%
+  ggplot(aes(x = ID, y = (response_reaction_time/1000)))+
+  geom_violin(alpha = .1, adjust = 1.5)+
+  geom_boxplot(alpha = .5)+
+  facet_grid(game_name~.)
+```
+
+#### We can calculate averages using the code below:
+
+```{r}
+RTs <- RTno.out%>%
+       group_by(ID, timepoint, game_name)%>%
+       summarize(avgRT = mean(response_reaction_time, na.rm = TRUE))
+
+RTs
+```
+
+#### We next want to look at the number correct for each trial. This is a second option for measuring success in the games (and therefore cognitive processing)
+
+```{r}
+Correct <- Merge.2%>%
+           group_by(ID, timepoint, game_name)%>%
+           summarize(tot.correct   = sum(is_response_correct == TRUE, na.rm = TRUE),
+                     tot.incorrect = sum(is_response_correct == FALSE, na.rm = TRUE),
+                     prop.correct = tot.correct/(tot.correct + tot.incorrect))
+```
+
+```{r, echo = FALSE, warning = FALSE}
+Correct%>%
+  ggplot(aes(x = ID, y = prop.correct))+
+  geom_violin(alpha = .1, adjust = 1.5)+
+  geom_boxplot(alpha = .5)+
+  facet_grid(game_name~.)
+```
+
+```{r, echo = FALSE}
+Correct%>%
+  ggplot(aes(x = prop.correct, fill = game_name))+
+  geom_histogram(aes(y = ..density..), binwidth = .05, alpha = .5)+
+  geom_density(alpha = .5)+
+  facet_grid(game_name~.)+
+  theme(legend.position = "none")
+```
+
+> We see there are some ceiling effects here. Many people got the majority, if not all, of the questions correct. We will still use these, but we have to keep this in mind.
+
+
+```{r}
+Game_Data <- merge(
+  x = Correct,
+  y = RTs,
+  by.x = c("ID", "timepoint", "game_name"),
+  by.y = c("ID", "timepoint", "game_name")
+)
+
+str(Game_Data)
+```
+
+#### Can merge this game data with the original smile data using the code below
+
+```{r}
+Game.Merge <- merge(
+  x = Game_Data,
+  y = IntKey,
+  by.x = "ID",
+  by.y = "ID"
+)
+
+PHQ.Corrs <- merge(
+  x = Game.Merge,
+  y = smile2,
+  by.x = c("Study.ID", "timepoint"),
+  by.y = c("StudyID_T1", "numTime"))
+
+str(PHQ.Corrs)
+
+write.csv(PHQ.Corrs, "1204.Merge.csv")
+```
+
+
+# Predictor Selection
+#### <i> In this section, we use the dataset from before to look at which variables are associated with depression scores. We also used multiple regression and model selection techniques to add support to the selection from the bivariate correlations.</i>
+
+
+```{r, echo = FALSE, warning = FALSE}
+PHQ.Corrs%>%
+  filter(game_name != "quick tap level 2")%>%
+  ggplot(aes(x = avgRT, y = PHQ.Score))+
+  geom_point()+
+  geom_smooth(method = "lm", formula = "y~x")+
+  facet_grid(game_name ~ timepoint)
+
+PHQ.Corrs%>%
+  filter(game_name == "quick tap level 2")%>%
+  ggplot(aes(x = avgRT, y = PHQ.Score))+
+  geom_point()+
+  geom_smooth(method = "lm", formula = "y~x")+
+  facet_grid(game_name ~ timepoint)
+```
+
+> This first plot above shows the correlation between reaction time and depression scores across all games and timepoints. Broadly, we see reaction time is not a great predictor of depression scores. We also see some counterintuitive relationships (such as in color trick 1, which seems to show faster reaction times are associated with higher levels of depression). There are also differences across time points. Quick tap has different relationships based on the timepoint.
+
+```{r, echo = FALSE, warning = FALSE}
+CT <- c("color trick 1", "color trick 2", "color trick 3")
+
+PHQ.Corrs%>%
+  filter(game_name %in% CT)%>%
+  ggplot(aes(x = tot.correct, y = PHQ.Score))+
+  geom_jitter()+
+  geom_smooth(method = "lm", formula = "y~x")+
+  facet_grid(game_name ~ timepoint)
+
+PHQ.Corrs%>%
+  filter(game_name == "quick tap level 2")%>%
+  ggplot(aes(x = tot.correct, y = PHQ.Score))+
+  geom_jitter()+
+  geom_smooth(method = "lm", formula = "y~x")+
+  facet_grid(game_name ~ timepoint)
+
+PHQ.Corrs%>%
+  filter(game_name == "hand swype")%>%
+  ggplot(aes(x = tot.correct, y = PHQ.Score))+
+  geom_jitter()+
+  geom_smooth(method = "lm", formula = "y~x")+
+  facet_grid(game_name ~ timepoint)
+
+PHQ.Corrs%>%
+  ggplot(aes(x = prop.correct, y = PHQ.Score))+
+  geom_jitter()+
+  geom_smooth(method = "lm", formula = "y~x")+
+  facet_grid(game_name ~ timepoint)
+```
+
+> These plots above show the relationship between correct answers and depression scores. We see the ceiling effects and how the relationships are driven by people who didn't get 100% correct on some games. Hand swype is the only one with a reasonable amount of variability, but there is no association between these scores and depression. Color Trick 3 has an association, but it is counter-intuitive. Quick tap has a potentially significant relationship at time one, but we can go to data-driven approaches to confirm this.
+
+#### We can look at the correlations of these variables with PHQ scores. We are particularly interested by time one, since these won't be impacted by the intervention
+
+```{r, warning = FALSE}
+PHQ.Corrs%>%
+  group_by(timepoint, game_name)%>%
+  summarize(cors = cor(PHQ.Score, avgRT))
+
+Time1Corrs <- filter(PHQ.Corrs, timepoint == 1)
+Time2Corrs <- filter(PHQ.Corrs, timepoint == 2)
+Time3Corrs <- filter(PHQ.Corrs, timepoint == 3)
+
+Time1Corrs.Wide <- pivot_wider(Time1Corrs,
+                              id_cols = c(Study.ID, ID, NeurUX.ID, timepoint,
+                                          Headspace.ID, Intervention.Group, semester, Int.Fac,
+                                          PHQ.Score),
+                              names_from = c(game_name),
+                              values_from = c(tot.correct, tot.incorrect, prop.correct,
+                                              avgRT))
+```
+
+```{r}
+library(corrplot)
+T1s <- data.frame(Time1Corrs.Wide[9:29])
+T1s <- mutate_if(T1s, is.integer, as.numeric)
+
+T1 <- cor(T1s)
+#We can look at the full correlations, but all we care about is PHQ
+corrplot(T1)
+```
+
+#### We can look at correlations with PHQ across measures and see which emerge with larger correlation coefficients
+
+```{r}
+T1.Corrs <- data.frame(rbind(rownames(T1), T1[1:21]))
+T1.Corrs <- data.frame(t(T1.Corrs))
+T1.Corrs <- mutate(T1.Corrs, Corr = as.numeric(X2))
+
+#Correct answers on quick tap are negatively associated with PHQ
+#Incorrect answers on CT3 and CT1 reaction time are also negatively correlated (less so)
+head(T1.Corrs[order(T1.Corrs$Corr),])
+
+#Incorrect quick tap answers are positively correlated with PHQ
+#Correct answers on CT3 are similarly positvely correlated (less so)
+head(T1.Corrs[order(-T1.Corrs$Corr),])
+```
+
+> These results seem to suggest answering correctly on Quick Tap and missing questions on the most difficult Color Trick game are the best predictors of depression scores. Reaction times are not likely great predictors of depression scores. If any, we could look at reaction times from Color Trick 1. The color trick results are all counter-intuitive.
+
+```{r, echo = FALSE}
+T1Viz <- data.frame(Time1Corrs.Wide)
+
+neg1<-
+T1Viz%>%
+  ggplot(aes(x = tot.correct_quick.tap.level.2, y = PHQ.Score))+
+  geom_jitter()+
+  geom_smooth(method = "lm", formula = "y ~ x")
+
+neg2<-
+T1Viz%>%
+  ggplot(aes(x = prop.correct_quick.tap.level.2, y = PHQ.Score))+
+  geom_jitter()+
+  geom_smooth(method = "lm", formula = "y ~ x")
+
+neg3<-
+T1Viz%>%
+  ggplot(aes(x = tot.incorrect_color.trick.3, y = PHQ.Score))+
+  geom_jitter()+
+  geom_smooth(method = "lm", formula = "y ~ x")
+
+neg4<-
+  T1Viz%>%
+  ggplot(aes(x = avgRT_color.trick.1, y = PHQ.Score))+
+  geom_jitter()+
+  geom_smooth(method = "lm", formula = "y ~ x")
+
+pos1 <-
+T1Viz%>%
+  ggplot(aes(x = tot.incorrect_quick.tap.level.2, y = PHQ.Score))+
+  geom_jitter()+
+  geom_smooth(method = "lm", formula = "y ~ x")
+
+pos2 <-
+T1Viz%>%
+  ggplot(aes(x = tot.correct_color.trick.3, y = PHQ.Score))+
+  geom_jitter()+
+  geom_smooth(method = "lm", formula = "y ~ x")
+
+pos3 <-
+T1Viz%>%
+  ggplot(aes(x = prop.correct_color.trick.3, y = PHQ.Score))+
+  geom_jitter()+
+  geom_smooth(method = "lm", formula = "y ~ x")
+
+```
+
+```{r}
+library(ggpubr)
+#Negative Correlations
+ggarrange(neg1, neg2, neg3, neg4,
+          labels = c("QT Total Correct", "QT Proportion Correct",
+                     "CT3 Total Incorrect", "CT1 Reaction Time"))
+```
+
+```{r}
+#Positive Correlations
+ggarrange(pos1, 
+          ggarrange(pos2,
+                    pos3,
+                    ncol = 2,
+                    labels = c("CT3 Total Correct", "CT3 Proportion Correct")),
+          nrow = 2, labels = "QT Total Incorrect")
+```
+
+> These plots show Quick Tap is likely our only good proxy for depression on these games. This game requires seeing an image, processing it, and deciding whether to tap or inhibit a response based on that image.
+
+#### Next, we used model selection techniques in a multiple regression model as well.
+
+```{r}
+#Note that the model has singularity problems because high level of overlap
+#For example, correct and incorrect obviously are not independent.
+lmod <- lm(PHQ.Score ~ ., data = T1s)
+summary(lmod)
+
+#This call shows us which predictors (1-9) should be included in the model
+library(leaps)
+AIC <- regsubsets(PHQ.Score ~ ., data = T1s)
+rs <- summary(AIC)
+rs$which
+
+#We can plot it to see the best number of predictors
+#We can get an idea of the optimal number of predictors based on the minimum of the plot
+AIC2 <- 50*log(rs$rss/50) + (2:10)*2
+plot(AIC2 ~ I(1:9), ylab = "AIC", xlab = "# of Predictors")
+#We see five predictors are ideal
+
+rs$which[5,]
+#The command below shows us the five predictors are:
+#CT3 Total Correct
+#HS Total Incorrect
+#QT Total Incorrect
+#QT Reaction Time
+#CT1 Reaction Time
+
+#Adjusted R Square corrects for the number of predictors
+#In this case, we see six predictors is the best option
+plot(2:10, rs$adjr2, ylab = "Adj. R^2", xlab = "# of Parameters")
+rs$which[6,]
+#The added predictor is reaction time for CT3
+
+#Mallow's CP suggests 3 predictors may be ideal
+plot(2:10, rs$cp, ylab = "CP Statistic", xlab = "# of Parameters")
+rs$which[3,] #The only three are QT total correct, CT1 reaction time, and CT3 proportion correct
+
+lmodAIC <- lm(PHQ.Score ~ tot.correct_color.trick.3 +
+                          tot.incorrect_hand.swype +
+                          tot.incorrect_quick.tap.level.2 +
+                          avgRT_quick.tap.level.2 +
+                          avgRT_color.trick.1 , data = T1s)
+
+summary(lmodAIC)
+#We see that missing questions on quick tap is associated with depression
+#Slower reaction times on color trick 1 are associated with more depression
+#More correct questions on color trick 3 are asssociated with more depression
+
+lmodRsq <- lm(PHQ.Score ~ tot.correct_color.trick.3 +
+                tot.incorrect_hand.swype +
+                tot.incorrect_quick.tap.level.2 +
+                avgRT_quick.tap.level.2 +
+                avgRT_color.trick.1 +
+                avgRT_color.trick.3, data = T1s)
+
+summary(lmodRsq)
+#Here, the same predictors are all significant
+
+lmodMallow <- lm(PHQ.Score ~ tot.correct_quick.tap.level.2 +
+                             prop.correct_color.trick.3 +
+                             avgRT_color.trick.1, data = T1s)
+
+summary(lmodMallow)
+#Total correct on quick tap was negatively associated with depression
+#Slower reaction times on color trick one were also negatively associated with depression
+#The 
+```
+
+
+# Quick Tap Exploratory Data Analysis
+#### <i> With Quick Tap correct questions established as a good proxy for depression scores, we can see how our mindfulness intervention impacts changes in this outcome over time.</i>
+
+```{r}
+QT <- filter(PHQ.Corrs, game_name == "quick tap level 2")
+
+str(QT)
+```
+
+#### This plot shows that people in the control group did worse on this task over time, while the intervention group was stable across timepoints.
+
+```{r}
+QT%>%
+  ggplot(aes(x = timepoint, y = tot.correct)) +
+  geom_jitter(alpha = .5, width = .1)+
+  geom_smooth(method = "lm", formula = "y ~ x")+
+  facet_wrap(.~Int.Fac)
+```
+
+#### We can also check the individual trajectories in a "spaghetti plot"
+
+```{r}
+QT$ID.Fac <- factor(QT$ID)
+
+QT%>%
+  ggplot(aes(x = timepoint, y = tot.correct, color = ID.Fac))+
+  geom_point()+
+  geom_smooth(se = FALSE,
+              method = "lm",
+              formula = "y ~ x",
+              size = .5)+
+  facet_wrap(.~Int.Fac)+
+  theme(legend.position = "none")
+```
+
+#### Finally, we can look at individual trajectories over time. We see further evidennce that the effect of the intervention is not consistent across all participants.
+
+```{r}
+QT%>%
+  filter(Int.Fac == "Control")%>%
+  ggplot(aes(x = timepoint, y = tot.correct))+
+  geom_point()+
+  geom_smooth(se = FALSE,
+              method = "lm",
+              formula = "y ~ x",
+              lty = "dashed",
+              size = .5)+
+  facet_wrap(.~ID.Fac)
+
+QT%>%
+  filter(Int.Fac == "Intervention")%>%
+  ggplot(aes(x = timepoint, y = tot.correct))+
+  geom_point()+
+  geom_smooth(se = FALSE,
+              method = "lm",
+              formula = "y ~ x",
+              lty = "dashed",
+              size = .5)+
+  facet_wrap(.~ID.Fac)
+```
+
+# Quick Tap Statistical Analysis
+#### <i> Need to add later</i>
+
+```{r}
+
+```
