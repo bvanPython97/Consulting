@@ -1,0 +1,488 @@
+---
+title: "STAT 488 Project Report"
+author: "Qing Gong, Nathan Lutz, Bao Van"
+date: "12/5/2021"
+output: 
+  html_document:
+  code_folding: show
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{css, echo=FALSE}
+h1{text-align: center; 
+  color:Tomato;
+  #font-weight: bold;}
+   
+h4{text-align:center;
+  color:DarkSlateGray}
+
+h5{text-align:left;
+  color:SlateBlue;}
+```
+
+```{r results='hide', message=FALSE, warning=FALSE}
+#Load library
+library(tidyverse);library(ggplot2);library(gridExtra);library(rstatix); library(lme4)
+#library(lattice);
+```
+
+##### Input the primary data   
+Creates an environment containing all list components(csv file) as objects and then read all all csv files into R.
+```{r}
+setwd("/Lectures/S488-002/Project/team/Consulting")
+temp = list.files(pattern="*.csv")
+list2env(
+  lapply(setNames(temp, make.names(gsub("*.csv$", "", temp))), 
+         read.csv), envir = .GlobalEnv)
+```
+
+##### Data cleaning   
+*1*. *user40* was a test case, which needs to be removed   
+*2*.Remove extra observation. For each student, they are supposed to do each game once. 
+  For each game, every one should have unique start time stamp
+  In R5, user6(B6) have two start time stamp for quick tap level 2, 2nd try is deleted here
+
+```{r}
+R1 <- round1_updated %>% filter(userid != 'user40')
+R5 <- round5_updated %>% filter(level_start_timestamp != "2021-03-25T18:55:58.767Z")
+```
+
+*3*. Add treatment information from NeurUX.Intrvention.Group file
+extract id number from NeurUX.ID, add A to Id numbers for 2021 Fall or B for Spring 2021 
+
+```{r}
+#intervention 1 and control 0
+Intervention1 <- read.csv("Consulting/NeurUX.Intervention.Group.csv") %>% 
+  slice(2:15) %>% 
+  mutate(ID = paste0('B', substr(NeurUX.ID, 5, 7))) %>% 
+  select(treatment= Intervention.Group, Study.ID, ID)
+
+Intervention2 <- read.csv("Consulting/NeurUX.Intervention.Group.csv")%>%
+  slice(18:36) %>% 
+  mutate( ID = paste0('A', substr(NeurUX.ID, 5, 7))) %>% 
+  select(treatment= Intervention.Group, Study.ID, ID)
+
+#combine subdata
+Intervention <- rbind(Intervention1, Intervention2)
+```
+
+
+*4*. Merge intervention data set into the primary dataset
+Add columns time_point 1(round1 and round4), 2(round 2 and round 5), 3(round 3 and round6)
+Since subjects in two semester are different userID could be renamed to unique ID 
+extract id number from ID, add A to Id numbers for subjects in 1 st semester or B for 2nd semester 
+
+```{r}
+R1 <- mutate(R1, time_point = 1, ID = paste0('A', substr(userid, 5, 7)))
+R2 <- mutate(round2_updated, time_point = 2, ID = paste0('A', substr(userid, 5, 7)))
+R3 <- mutate(round3_updated, time_point = 3, ID = paste0('A', substr(userid, 5, 7)))
+R4 <- mutate(round4_updated, time_point = 1, ID = paste0('B', substr(userid, 5, 7)))
+R5 <- mutate(R5, time_point = 2, ID = paste0('B', substr(userid, 5, 7)))
+R6 <- mutate(round6_updated, time_point = 3, ID = paste0('B', substr(userid, 5, 7)))
+
+#combine all data into one whole dataset
+R_all <- rbind(R1, R2, R3, R4, R5, R6)
+#view the features of original data
+#head(R_all)
+#Merge Intervention into R_all dataset
+data <- merge(R_all, Intervention, by = "ID")
+```
+
+##### Subset color trick data
+```{r}
+colorTrick <- data %>% select (
+  time_point,
+  treatment,
+  game_name,
+  ID, 
+  response_reaction_time,
+  correct_count,
+  Study.ID,
+  event_type,
+  is_response_correct,
+  incorrect_count,
+  user_response,
+  mechanic_name
+) %>%
+  filter(game_name %in% c("color trick 1",
+                          "color trick 2",
+                          "color trick 3"),
+         event_type == "trial"
+         )
+#sum(is.na(colorTrick))
+#head(colorTrick)
+```
+
+Calculate average reaction time and correct proportion for each subject at each time point for each color and add them into the dataset.
+Transform average reaction time by logthrime to make data more normal.
+
+```{r}
+colorT <- colorTrick %>% filter(event_type == "trial" &
+                                  is_response_correct == TRUE) 
+color <- colorT %>% 
+  group_by(treatment,game_name, ID, Study.ID, time_point) %>%
+  summarise('average_RT' = sprintf("%0.2f", mean(response_reaction_time)),
+            'tcorrect'= sum(is_response_correct),
+            'prop_ncorrect' = max(correct_count)/sum(max(correct_count) + max(incorrect_count)),
+            .groups = 'drop') %>% 
+  mutate(across(c(treatment, game_name, time_point, ID), as.factor),
+         across(average_RT, as.numeric),
+         log_avg_RT=log(average_RT))
+```
+
+
+First peek   
+Check average_RT for 3 color trick games and compare plots before and after transformation
+```{r}
+g1 <- ggplot(color, aes(x = game_name, y = average_RT))  +
+  geom_boxplot(fill = rep(c("#bad2d7", "#ffd9df", "#9ec2e2"), length = 3)) +
+  theme_classic() 
+g2 <- ggplot(color, aes(x = game_name, y = log_avg_RT))  +
+  geom_boxplot(fill = rep(c("#bad2d7", "#ffd9df", "#9ec2e2"), length = 3)) +
+  theme_classic()
+grid.arrange(g1, g2, ncol=2)
+
+#check extreme outliers
+# pc %>% 
+#   group_by(game_name) %>% 
+#   identify_outliers(log_avg_RT)
+#No extreme outliers
+```
+
+Plots show that color trick 3 requires longer reaction time, which indicates it's harder than other color tricks.
+
+Test average reaction time difference for three color trick games.   
+Normality is still not satisfied.Non-parametric test, Kruskal-Wallis test, was employed and small p-value shows significant difference among three color tricks.    
+Pair-wise comparison test indicates any two of them has significant different transformed average reaction time.
+```{r}
+#anova test
+m1 <- lm(log_avg_RT ~ game_name, data = color)
+anova(m1)
+#normality check
+shapiro.test(m1$residuals)
+# small p-value from Shapiro-Wilk test indicates non-normality
+
+kruskal.test(log_avg_RT ~ game_name, data = color)
+pairwise.wilcox.test(color$log_avg_RT, color$game_name)
+```
+
+Since reaction time for three color trick games is statistically different, three color trick games would be analyzed separately.
+
+Check average reaction time difference for three time points
+```{r}
+ggplot(color, aes(x = game_name, y = log_avg_RT)) +
+  geom_boxplot(aes(fill = time_point), notch = T, alpha = 0.6) +
+  labs(title = "Avgerage reaction time(log) by game and time point", y = "Average reaction        time(log)", x = "Time point") +
+  theme_classic()
+#"#33ff66","#ffd9df","#9ec2e2"
+```
+
+**Extract each color trick subsets from *color* data**
+
+```{r}
+ct1 <- color %>% filter(game_name == "color trick 1") %>%
+  select(treatment,
+         ID,
+         time_point,
+         average_RT,
+         log_avg_RT,
+         prop_ncorrect,
+         tcorrect)  %>%
+  mutate(time_point = factor(time_point))
+
+ct2 <- color %>% filter(game_name == "color trick 2") %>%
+  select(treatment,
+         ID,
+         time_point,
+         average_RT,
+         log_avg_RT,
+         prop_ncorrect,
+         tcorrect) %>%
+  mutate(time_point = factor(time_point))
+
+ct3 <- color %>% filter(game_name == "color trick 3") %>%
+  select(treatment,
+         ID,
+         time_point,
+         average_RT,
+         log_avg_RT,
+         prop_ncorrect,
+         tcorrect)  %>%
+  mutate(time_point = factor(time_point))
+```
+
+Check average reaction time(log) by treatment at each time point for each color trick
+
+```{r}
+ggplot(ct1, aes(time_point, log_avg_RT, fill = treatment)) +
+  geom_boxplot(position = position_dodge(0.7),
+               width = 0.4,
+               alpha = 0.2) +
+  geom_dotplot(binaxis = "y",
+               stackdir = "center",
+               position = position_dodge(0.7),alpha = 0.7, binwidth = 0.034) +
+  labs(title = "Color trick 1", y = "Average reaction time(log)", x = "Time point") +
+  theme_classic()
+
+ggplot(ct2, aes(time_point, log_avg_RT, fill = treatment)) +
+  geom_boxplot(position = position_dodge(0.7),
+               width = 0.4,
+               alpha = 0.2) +
+  geom_dotplot(binaxis = "y",
+               stackdir = "center",
+               position = position_dodge(0.7), alpha = 0.7, binwidth = 0.0748) +
+  labs(title = "Color trick 2", y = "Average reaction time(log)", x = "Time point") +
+  theme_classic()
+
+ggplot(ct3, aes(time_point, log_avg_RT, fill = treatment)) +
+  geom_boxplot(position = position_dodge(0.7),
+               width = 0.4,
+               alpha = 0.2) +
+  geom_dotplot(binaxis = "y",
+               stackdir = "center",
+               position = position_dodge(0.7), alpha = 0.7, binwidth = 0.051) +
+  labs(title = "Color trick 3", y = "Average reaction time(log)", x = "Time point") +
+  theme_classic()
+
+# res.aov <- anova_test(pc3, dv = log_avg_RT, wid=ID, between=treatment, within=time_point)
+# get_anova_table(res.aov)
+```
+
+Plot 1
+For the control group the average reaction time(*log_avg_RT*) decreases from time point 1(T1) to time point 2(T2), slightly increase from time point 2 to time point 3(T3). 
+For the intervention group,  *log_avg_RT* barely changes over time. Practice effect may work here, especially from T1 to T2.
+
+Plot 2 
+*log_avg_RT* for the intervention group decreases a little and then slightly increases over time.
+For the control group, *log_avg_RT* get some reduction. 
+Practice effect could be considered there.
+
+"Practice effects occur when a person is exposed to a test or measurement technique."
+
+
+Plot 3 
+For intervention group, *log_avg_RT* slightly drops from T1 to T2, obviously decrease from T2 to T3. 
+For the control group, *log_avg_RT* decreases over time.
+
+For T3, the intervention group has longer *log_avg_RT* than the control group for color trick 2 and color trick 3.
+Guess this maybe because color trick 2 and color trick 3 are harder than color trick 1. Besides, the period between T2and T3 may be longer than that between T1 and T2.
+
+
+##### Read in SMILE DATA
+
+```{r}
+SMILE <- read.csv("Consulting/SMILE full data 10 23 21_AARThesis_Deidentified_forNL.csv")  #  HS group = 1, Control group = 2
+
+#SMILE$PHQ1_T2R[SMILE$StudyID_T1 == 22585621]   # should we remove this 26 > 25?
+#SMILE$PHQ_T1_total[SMILE$StudyID_T1 == 22585602]   # 0 is abnormal?
+
+#change control group = 2 into 0
+SMILE$treatment1 <- ifelse(SMILE$Group_HSvsNoHS == 1, 1, 0)
+
+#Check PHQ is from PHQ_TD_total = sum(PHQD_TDR)
+# PH <- SMILE %>% 
+#   select(StudyID_T1, starts_with("PHQ")) %>% 
+#   rename(Study.ID = StudyID_T1)
+# PHT <- PH %>% 
+#   select(ends_with("_T3R"))   #PHQ_T1_total = sum(PHQD_TDR)
+#   
+# PHT$TOTAL = apply(PHT, 1, sum)
+# PHT$SUM = PH$PHQ_T3_total  
+
+PHQ <- SMILE %>%
+  select(
+    StudyID_T1,
+    Gender_Numeric_T1,
+    MotherEdu_T1,
+    ParentalHouseholdIncome_T1,
+    Grade_T1,
+    AgeExact_T1,
+    PHQ_T1_total,
+    PHQ_T2_total,
+    PHQ_T3_total,
+    treatment1
+  ) %>%
+  rename(
+    Study.ID = StudyID_T1,
+    "1" = PHQ_T1_total,
+    "2" = PHQ_T2_total,
+    "3" = PHQ_T3_total
+  ) %>%
+  gather("1", "2", "3", key = time_point, value = "PHQ")       #change wide-format PHQ for 3 time points into long format
+
+#check all intervention participants in smile data at T1
+#sum(NeurUX.Intervention.Group$Study.ID %in% SMILE$StudyID_T1)
+
+#combine PHQ and color trick game
+pnc <- left_join(color, PHQ, by = c("Study.ID", "time_point"))
+```
+
+Check correlation among grade, mother education, household income, average reaction time, PHQ
+```{r}
+relation <- PHQ %>% mutate(mom_edu = ifelse(MotherEdu_T1 == "Some High School", 1, 
+                                       ifelse(MotherEdu_T1 == "High School", 2, 
+                                              ifelse(MotherEdu_T1 == "Some College", 3, 
+                                                     ifelse(MotherEdu_T1 == "College", 4, 
+                                                            ifelse(MotherEdu_T1 == "Graduate School", 5, ""))))),  
+                      grade=ifelse(Grade_T1=="First-year", 1, 
+                                   ifelse(Grade_T1=="Sophomore", 2, 
+                                          ifelse(Grade_T1=="Junior", 3, 
+                                                 ifelse(Grade_T1=="Senior", 4,
+                                                        ifelse(Grade_T1 == "Other (fee", 4, ""))))),
+                      income=ifelse(ParentalHouseholdIncome_T1=="Under $25,000", 1, 
+                                    ifelse(ParentalHouseholdIncome_T1=="$25,000-$50,000", 2, 
+                                           ifelse(ParentalHouseholdIncome_T1 == "$50,000-$75,000", 3,
+                                                  ifelse(ParentalHouseholdIncome_T1 == "$75,000-$100,000", 4, 
+                                                         ifelse(ParentalHouseholdIncome_T1 == "$100,000-$150,000", 5,
+                                                                ifelse(ParentalHouseholdIncome_T1 == "$150,000-$200,000", 6,
+                                                                       ifelse(ParentalHouseholdIncome_T1 == "Over $200,000", 7, ""))))))), 
+                      gender = Gender_Numeric_T1)
+
+#combine PHQ and Neuro-ux
+PHQ_UX <- left_join(color, relation, by = c("Study.ID", "time_point"))
+
+merg <- PHQ_UX %>% select(average_RT, prop_ncorrect, tcorrect, AgeExact_T1, gender, treatment, PHQ, mom_edu, income, grade, time_point) %>% 
+  mutate(across(where(is.character), as.numeric),
+         treatment= as.numeric(treatment))
+
+library(corrplot)
+m <- cor(merg)
+corrplot(m)
+# cor(merg$average_RT, merg$PHQ)
+# cor(merg$prop_ncorrect, merg$PHQ)
+
+```
+
+##### Correlation plot
+Average reaction time(*average_RT*) is negatively related with total number of correct(*tcorrect*) and proportion of correct(*prop_ncorrect*) as we assumed.
+Overall, PHQ doesn't obviously correlated with any variables of interest, except gender.
+Female(1) tends to have higher PHQ than male. 
+
+We suppose PHQ positively correlated with *average_RT* and negatively correlated with 
+*tcorrect* or *prop_ncorrect*. But this plot shows the opposite direction. 
+
+Different color tricks, time point and treatment conditions would be covered in the next step.
+
+Since we assume PHQ is related with *average_RT*, we could perform a MANOVA test to analyze group means based on these two dependent variables.
+
+##### MANOVA TEST
+```{r}
+#get target dataset
+pc3 <- pnc %>% 
+      filter(game_name=="color trick 3") %>% 
+      select(-AgeExact_T1, -MotherEdu_T1, -ParentalHouseholdIncome_T1, -Grade_T1, -Study.ID, -treatment1) %>% 
+      mutate(time_point = as.factor(time_point),
+             gender = as.factor(Gender_Numeric_T1))
+
+b1 <- ggplot(pc3, aes(treatment, PHQ, fill=(treatment))) + 
+  geom_point(width = 1)+
+   geom_boxplot(outlier.shape = NA, size= 0.3)+
+  theme(legend.position = "top")
+
+b2 <- ggplot(pc3, aes(treatment, log_avg_RT, fill=(treatment))) + 
+  geom_point()+
+  geom_boxplot(outlier.shape = NA, size = 0.3)+
+  theme(legend.position = "top")
+
+grid.arrange(b1,b2, ncol=2)
+
+#MANOVA
+#differences among treatment groups by considering average reaction time and log_avg_RT
+
+#summary statistics for dependent variables log(averag)
+# pc3 %>% group_by(treatment) %>% summarise(mean=mean(PHQ), sd=sd(PHQ))
+# 
+# pc3 %>% group_by(treatment) %>% summarise(mean=mean(log_avg_RT), sd=sd(log_avg_RT))
+
+#peform one-way manova
+dep_vars <- cbind(pc3$PHQ, pc3$log_avg_RT)
+fit <- manova(dep_vars ~ treatment, data=pc3)
+summary(fit)
+```
+P-value = 0.2791 indicates that treatment doesn't have a statistically significant association with both combined average reaction time and PHQ.
+
+**Assumptions check**
+
+```{r}
+#univariate normality for each combination of the independent and dependent variables
+
+#pc3 %>% group_by(treatment) %>% shapiro_test(PHQ, log_avg_RT)
+#data follows univariate normality.
+
+#or check multivariate normality using Mardia’s Skewness and Kurtosis test
+library(mvnormalTest)
+mardia(pc3[, c("PHQ", "log_avg_RT")])$mv.test
+```
+
+Mardia’s Skewness and Kurtosis test, we fail to reject the null hypothesis and conclude that data follows multivariate normality.
+
+*Check Homogeneity of the variance-covariance matrices*
+```{r}
+library(heplots)
+boxM(Y = pc3[, c("PHQ", "log_avg_RT")], group= pc3$treatment)
+```
+
+A big p-value shows variance-covariance matrices are equal for each combination of dependent variables formed by each treatment group
+
+*Multivariate outliers*
+```{r}
+library(rstatix)
+mahalanobis_distance(data= pc3[, c("PHQ", "log_avg_RT")])$is.outlier
+```
+
+No outliers shown here.
+
+*Linearity assumption*
+```{r}
+pl0 <- pc3 %>% group_by(treatment) %>% filter(treatment == "0") %>% ggplot(aes(x=log_avg_RT, y= PHQ)) + geom_point() + geom_smooth(method ="lm") + ggtitle("treatment 0")
+pl1 <- pc3 %>% group_by(treatment) %>% filter(treatment == "1") %>% ggplot(aes(x=log_avg_RT, y= PHQ)) + geom_point() + geom_smooth(method = "lm")+ ggtitle("treatment 1")
+grid.arrange(pl0, pl1)
+```
+
+Plots show average reaction time has a linear relationship with PHQ for each group in the treament variable.
+
+*Multicollinearity assumption*
+```{r}
+cor(x = pc3$PHQ, y = pc3$log_avg_RT)
+```
+
+The correlation is weak, separate univariate ANOVA could be performed here.
+Since our data is unbalanced, we could use a multi-level linear model to analyze whether treatment and time points have statistical effect on average reaction time.
+
+##### Multi-level linear models  
+1. unbalanced data   
+2. avoid sphericity issues     
+sphericity is equality of variance of the differences between all possible pairs of within-subject conditions
+```{r}
+#Run multi-level linear model for color trick 1
+lme1 <- lmer(log_avg_RT~ 1 + (1|ID), data = pc3)
+lme2 <- update(lme1, .~. + treatment)
+lme3 <- update(lme2, .~. + time_point)
+Anova(lme3)
+lme4 <- update(lme3, .~. + treatment*time_point) # interaction is insig.
+anova(lme1, lme2, lme3, lme4)
+```
+Assumption check 
+```{r}
+#assumption check
+plot(lme3)
+qqnorm(resid(lme3))
+shapiro.test(resid(lme3))
+
+# assumption verified 
+# interaction insignificant. choose model 3, from Anova table, both treatment and time_point insig.
+```
+
+
+The output show for color trick 3, average reaction time is significantly different at 3 time points and that there is no difference between control group and intervention group. 
+We may conclude that for hard game one could have short average reaction time after practice but treatment doesn't help reduce average reaction time.
+
+Perhaps longer time period and balanced data could works better for treatment effect.
+
+**References**:
+
+ https://www.reneshbedre.com/blog/manova.html          
+ https://jackauty.com/multi-level-linear-model/       
+ https://www.psywww.com/intropsych/ch01-psychology-and-science/operational-definitions.html#practiceeffects*
