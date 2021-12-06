@@ -112,7 +112,7 @@ RTno.out%>%
   ggplot(aes(x = ID, y = (response_reaction_time/1000)))+
   geom_violin(alpha = .1, adjust = 1.5)+
   geom_boxplot(alpha = .5)+
-  facet_grid(game_name~.)
+  facet_grid(game_name~., scales = "free")
 
 #We can now calculate reaction times for each game for each participant
 RTs <- RTno.out%>%
@@ -226,7 +226,7 @@ PHQ.Corrs%>%
   ggplot(aes(x = avgRT, y = PHQ.Score))+
   geom_point()+
   geom_smooth(method = "lm")+
-  facet_grid(game_name ~ timepoint)
+  facet_grid(game_name ~ timepoint, scales = "free")
 
 PHQ.Corrs%>%
   ggplot(aes(x = tot.correct, y = PHQ.Score))+
@@ -422,13 +422,13 @@ str(PHQ.Corrs)
 PHQ.Corrs%>%
   ggplot(aes(x = avgRT, y = prop.correct))+
   geom_jitter(alpha = .5)+
-  facet_grid(timepoint~game_name)
+  facet_grid(timepoint~game_name, scales = "free")
 
 PHQ.Corrs%>%
   filter(game_name %in% c("color trick 1", "color trick 2", "color trick 3"))%>%
   ggplot(aes(x = avgRT, y = tot.correct))+
   geom_jitter(alpha = .5)+
-  facet_grid(timepoint~game_name)
+  facet_grid(timepoint~game_name, scales = "free")
 
 PHQ.Corrs%>%
   filter(game_name == "quick tap level 2")%>%
@@ -463,7 +463,7 @@ RTno.out%>%
 RTno.out%>%
   ggplot(aes(x = is_response_correct, y = response_reaction_time, fill = is_response_correct))+
   geom_boxplot()+
-  facet_wrap(.~game_name)
+  facet_wrap(.~game_name, scales = "free")
 
 #Broadly, it doesn't seem like taking your time on CT makes a difference. If anything,
 #going faster increased performance
@@ -486,7 +486,7 @@ PHQ.Corrs%>%
   ggplot(aes(x = PHQ.Score, y = avgRT, color = Int.Fac))+
   geom_point()+
   geom_smooth(method = "lm")+
-  facet_grid(Int.Fac~timepoint)
+  facet_grid(Int.Fac~timepoint, scales = "free")
 
 PHQ.Corrs<- mutate(PHQ.Corrs, PHQ.Fac = case_when(PHQ.Score < 9 ~ 0,
                                                  PHQ.Score < 14 & PHQ.Score > 9 ~ 1,
