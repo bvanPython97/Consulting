@@ -414,3 +414,92 @@ lmodMallow <- lm(PHQ.Score ~ tot.correct_quick.tap.level.2 +
 summary(lmodMallow)
 #Total correct on quick tap was negatively associated with depression
 #Slower reaction times on color trick one were also negatively associated with depression
+
+#I just thought about this... Color Trick doesn't encourage you to take your time or go
+#quickly. There is likely an association between time and number correct
+str(PHQ.Corrs)
+
+PHQ.Corrs%>%
+  ggplot(aes(x = avgRT, y = prop.correct))+
+  geom_jitter(alpha = .5)+
+  facet_grid(timepoint~game_name)
+
+PHQ.Corrs%>%
+  filter(game_name %in% c("color trick 1", "color trick 2", "color trick 3"))%>%
+  ggplot(aes(x = avgRT, y = tot.correct))+
+  geom_jitter(alpha = .5)+
+  facet_grid(timepoint~game_name)
+
+PHQ.Corrs%>%
+  filter(game_name == "quick tap level 2")%>%
+  ggplot(aes(x = avgRT, y = tot.correct))+
+  geom_jitter(alpha = .5)+
+  facet_grid(timepoint~game_name)
+
+PHQ.Corrs%>%
+  filter(game_name == "hand swype")%>%
+  ggplot(aes(x = avgRT, y = prop.correct))+
+  geom_jitter(alpha = .5)+
+  geom_smooth(method = "lm", formula = "y ~ x")
+
+PHQ.Corrs%>%
+  filter(game_name == "hand swype")%>%
+  ggplot(aes(x = avgRT, y = tot.correct))+
+  geom_jitter(alpha = .5)+
+  geom_smooth(method = "lm", formula = "y ~ x")
+
+PHQ.Corrs%>%
+  filter(game_name == "hand swype")%>%
+  ggplot(aes(x = tot.correct, y = prop.correct))+
+  geom_jitter(alpha = .5)+
+  geom_smooth(method = "lm", formula = "y ~ x")
+
+str(RTno.out)
+
+RTno.out%>%
+  group_by(game_name, is_response_correct)%>%
+  summarize(RT = mean(response_reaction_time))
+
+RTno.out%>%
+  ggplot(aes(x = is_response_correct, y = response_reaction_time, fill = is_response_correct))+
+  geom_boxplot()+
+  facet_wrap(.~game_name)
+
+#Broadly, it doesn't seem like taking your time on CT makes a difference. If anything,
+#going faster increased performance
+
+RTno.out%>%
+  filter(game_name == "hand swype")%>%
+  ggplot(aes(x = is_response_correct, y = response_reaction_time, fill = is_response_correct))+
+  geom_boxplot()
+
+RTno.out%>%
+  filter(game_name == "quick tap level 2")%>%
+  ggplot(aes(x = is_response_correct, y = response_reaction_time, fill = is_response_correct))+
+  geom_boxplot()
+
+#On the flip side, for hand swype and quick tap there may have been more success for
+#those who took their time
+
+PHQ.Corrs%>%
+  filter(game_name == "hand swype")%>%
+  ggplot(aes(x = PHQ.Score, y = avgRT, color = Int.Fac))+
+  geom_point()+
+  geom_smooth(method = "lm")+
+  facet_grid(Int.Fac~timepoint)
+
+PHQ.Corrs<- mutate(PHQ.Corrs, PHQ.Fac = case_when(PHQ.Score < 9 ~ 0,
+                                                 PHQ.Score < 14 & PHQ.Score > 9 ~ 1,
+                                                 PHQ.Score > 15 ~ 2))
+PHQ.Corrs%>%
+  filter(game_name == "hand swype")%>%
+  ggplot(aes(x = Intervention.Group, y = avgRT, color = factor(PHQ.Fac)))+
+  geom_jitter(width = .1)+
+  geom_smooth(method = "lm")+
+  facet_grid(.~PHQ.Fac)
+
+dumdum <- aggregate(avgRT ~ Intervention.Group + PHQ.Fac, FUN = mean, data = PHQ.Corrs)
+effects_interaction <- ggplot(dumdum, aes(x = Intervention.Group, y = avgRT, color = PHQ.Fac)) +
+  geom_point() +
+  geom_line(aes(group = PHQ.Fac))
+effects_interaction
