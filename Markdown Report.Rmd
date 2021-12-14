@@ -193,6 +193,10 @@ timepoints <- comp.data%>%
               group_by(ID)%>%
               summarize(n())
 timepoints
+
+sum(timepoints$'n()' == 3)
+sum(timepoints$'n()' == 2)
+sum(timepoints$'n()' == 1)
 ```
 
 >We aren't using this for this study, but it could be useful for cross-checking datasets or confirming with Dr. Silton.
@@ -215,7 +219,7 @@ Merge.2%>%
   ggplot(aes(x = ID, y = (response_reaction_time/1000)))+
   geom_violin(alpha = .1, adjust = 1.5)+
   geom_boxplot(alpha = .5)+
-  facet_grid(game_name~.)
+  facet_grid(game_name~., scales = "free")
 
 Merge.2%>%
   filter(game_name %in% CT)%>%
@@ -294,7 +298,7 @@ nrow(QTdf)
 RTno.out <- rbind(CTdf, QTdf, HSdf)
 nrow(Merge.2) 
 nrow(RTno.out)
-nrow(Merge.2)-nrow(RTno.out) #Should have removed 75 missing responses and 647 0s from QT
+nrow(Merge.2)-nrow(RTno.out) #Should have removed 75 outlier responses and 647 0s from QT
 ```
 
 #### The plot below shows the new reaction times across games. There are still some outliers, but the range is now a bit less variable.
@@ -305,7 +309,7 @@ RTno.out%>%
   ggplot(aes(x = ID, y = (response_reaction_time/1000)))+
   geom_violin(alpha = .1, adjust = 1.5)+
   geom_boxplot(alpha = .5)+
-  facet_grid(game_name~.)
+  facet_grid(game_name~., scales = "free")
 ```
 
 #### We can calculate averages using the code below:
@@ -590,8 +594,8 @@ plot(2:10, rs$cp, ylab = "CP Statistic", xlab = "# of Parameters")
 rs$which[3,] #The only three are QT total correct, CT1 reaction time, and CT3 proportion correct
 
 lmodAIC <- lm(PHQ.Score ~ tot.correct_color.trick.3 +
-                          tot.incorrect_hand.swype +
-                          tot.incorrect_quick.tap.level.2 +
+                          tot.correct_hand.swype +
+                          tot.correct_quick.tap.level.2 +
                           avgRT_quick.tap.level.2 +
                           avgRT_color.trick.1 , data = T1s)
 
@@ -601,8 +605,8 @@ summary(lmodAIC)
 #More correct questions on color trick 3 are asssociated with more depression
 
 lmodRsq <- lm(PHQ.Score ~ tot.correct_color.trick.3 +
-                tot.incorrect_hand.swype +
-                tot.incorrect_quick.tap.level.2 +
+                tot.correct_hand.swype +
+                tot.correct_quick.tap.level.2 +
                 avgRT_quick.tap.level.2 +
                 avgRT_color.trick.1 +
                 avgRT_color.trick.3, data = T1s)
@@ -611,7 +615,7 @@ summary(lmodRsq)
 #Here, the same predictors are all significant
 
 lmodMallow <- lm(PHQ.Score ~ tot.correct_quick.tap.level.2 +
-                             prop.correct_color.trick.3 +
+                             tot.correct_color.trick.3 +
                              avgRT_color.trick.1, data = T1s)
 
 summary(lmodMallow)
@@ -633,6 +637,11 @@ str(QT)
 #### This plot shows that people in the control group did worse on this task over time, while the intervention group was stable across timepoints.
 
 ```{r}
+QT%>%
+  ggplot(aes(x = timepoint, y = tot.correct)) +
+  geom_jitter(alpha = .5, width = .1)+
+  geom_smooth(method = "lm", formula = "y ~ x")
+
 QT%>%
   ggplot(aes(x = timepoint, y = tot.correct)) +
   geom_jitter(alpha = .5, width = .1)+
